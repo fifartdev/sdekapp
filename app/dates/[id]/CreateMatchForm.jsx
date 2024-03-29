@@ -9,6 +9,7 @@ export default function CreateMatchForm({date, dateId}) {
     const [teamA, setTeamA] = useState('')
     const [teamB, setTeamB] = useState('')
     const [matches, setMatches] = useState([])
+    const [disabled, setDisabled] = useState(false)
        
     // GET ALL TEAMS
     const getTeams = async ()=> { try {
@@ -29,6 +30,7 @@ export default function CreateMatchForm({date, dateId}) {
         // console.log(final);
         if(final.length === 0){
             setTeams([])
+            setDisabled(true)
         } else {
 
             const definiteData = await db.listDocuments(ODKE_DB, COL_TEAMS, [
@@ -110,6 +112,7 @@ export default function CreateMatchForm({date, dateId}) {
         }}
       value={teamA}
       required
+      disabled={disabled}
       >
         <option value="" disabled>
           Επιλέξετε Ομάδα Α
@@ -131,6 +134,7 @@ export default function CreateMatchForm({date, dateId}) {
     }}
       value={teamB}
       required
+      disabled={disabled}
       >
          <option value="" disabled>
           Επιλέξετε Ομάδα B

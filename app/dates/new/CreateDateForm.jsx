@@ -1,17 +1,38 @@
 'use client'
-import {useState} from 'react'
-import { db, COL_DATES, ID, ODKE_DB } from '@/utils/appwrite'
+import {useEffect, useState} from 'react'
+import { db, COL_DATES, ID, ODKE_DB, COL_REFS, Query } from '@/utils/appwrite'
 import { useRouter } from 'next/navigation';
 
 export default function CreateDateForm() {
 
     const [date, setDate] = useState(new Date())
+    const [refs, setRefs] = useState([])
     const router = useRouter()
+
+    const getAllRefs = async () => {
+
+      try {
+        const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
+        let refIds = []
+        res.map(r=> refIds.push(r.user_id))
+        setRefs(refIds)
+        
+      } catch (error) {
+        console.log('Get all refs error', error.message);
+      }
+
+    }
+
+    useEffect(()=>{
+      getAllRefs()
+    },[])
+
+    //console.log("All refs are: ",refs[0]);
 
     const handleCreateDate = async (e) => {
         try {
             e.preventDefault()
-            await db.createDocument(ODKE_DB,COL_DATES,ID.unique(), {date: date})
+            await db.createDocument(ODKE_DB,COL_DATES,ID.unique(), {date: date, referees:refs})
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {
