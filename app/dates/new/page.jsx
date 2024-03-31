@@ -7,10 +7,15 @@ export default function newDate() {
   
 
   return (
-    <>
-    <Link href={'/'}>Home</Link>
-    <div>newDate</div>
-    <CreateDateForm/>
-    </>
+    <main className="flex justify-center min-h-screen">
+       <div className="w-full p-4">
+    <Link href={'/'} className="text-blue-500 hover:underline">Αρχική</Link>
+    <div className="text-lg font-bold mt-4 mb-2">Νέα Αγωνιστική</div>
+    <div className="w-full max-w-md">
+      <CreateDateForm />
+    </div>
+  </div>
+  </main>
+  
   )
 }

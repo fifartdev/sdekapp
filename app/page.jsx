@@ -16,13 +16,12 @@ export default function Home() {
     //console.log('Log from / :', user);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-
-        
-        <Login />
-
+    <main className="flex min-h-screen">
+       <div className="w-full p-10">
+        <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΟΣΕΚΑ</h1>
+    <Login />
       </div>
-    </main>
+</main>
+
   );
 }

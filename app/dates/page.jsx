@@ -43,18 +43,32 @@ export default function pageDates() {
 
 
   return (
-    <>
-    <div>All Match Dates</div>
-    <Link href={"/"}>Home</Link> | { isUserAdmin && <><Link href={"/dates/new"}>add a date</Link> |</> } <button onClick={handleLogout}>Logout</button>
-    <ul>
-        {matchDates.map(d=>{
-            let hDate = new Date(d.date).toLocaleDateString('el-GR')
-            return (
-                <li key={d.$id}><button onClick={()=>{ router.push(`/dates/${d.$id}`)}}>{hDate}</button></li>
-            )
-        })}
+    <main className="flex justify-center min-h-screen">
+       <div className="w-full p-10">
+    <div>Ημερομηνίες Αγώνων</div>
+    <div className="flex items-center">
+      <Link href={"/"} className="text-blue-500 hover:underline">Αρχική</Link>
+      {isUserAdmin && (
+        <>
+          <span>|</span>
+          <Link href={"/dates/new"} className="text-blue-500 hover:underline">Προσθήκη Αγωνιστικής Ημέρας</Link>
+        </>
+      )}
+      <span>|</span>
+      <button onClick={handleLogout} className="text-blue-500 hover:underline">Αποσύνδεση</button>
+    </div>
+    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      {matchDates.map(d => {
+        let hDate = new Date(d.date).toLocaleDateString('el-GR');
+        return (
+          <li key={d.$id} className="bg-white rounded-lg shadow-md p-4" >
+            <button className="rounded-lg p-4" onClick={() => { router.push(`/dates/${d.$id}`) }}>{hDate}</button>
+          </li>
+        );
+      })}
     </ul>
-    </>
+  </div>
+  </main>
   )
 }
 

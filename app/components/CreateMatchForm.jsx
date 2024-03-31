@@ -103,56 +103,50 @@ const CreateMatchForm = ({dateId}) => {
 
   return (
     <>
-    <div>CreateMatchForm</div>
-    <form onSubmit={handleCreateMatch}>
+  <div className="text-lg font-bold mb-4">Προσθήκη Αγώνα</div>
+  <form onSubmit={handleCreateMatch} className="max-w-md mx-auto">
     <div className="mb-4">
-    <label htmlFor="omadaA">Ομάδα Α</label>
-    <select
-      name="select"
-      id="omadaA"
-      onChange={(e) => {
-        setTeamA(e.target.value) 
-        }}
-      value={teamA}
-      required
-      disabled={disabled}
+      <label htmlFor="omadaA" className="block text-gray-700 text-sm font-bold mb-2">Ομάδα Α</label>
+      <select
+        name="omadaA"
+        id="omadaA"
+        onChange={(e) => setTeamA(e.target.value)}
+        value={teamA}
+        required
+        disabled={disabled}
+        className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
         <option value="" disabled>
-          Επιλέξετε Ομάδα Α
-          </option>
-        {teams.map((t)=>{
-          return (
-            <option value={t.$id} key={t.$id}>{t.name}</option>
-          )
-        })}
+          Επιλέξτε Ομάδα Α
+        </option>
+        {teams.map((t) => (
+          <option value={t.$id} key={t.$id}>{t.name}</option>
+        ))}
       </select>
-  </div>
-  <div className="mb-4">
-    <label htmlFor="omadaΒ" >Ομάδα B</label>
-    <select
-      name="select"
-      id="omadaΒ"
-      onChange={(e) => {
-        setTeamB(e.target.value)
-    }}
-      value={teamB}
-      required
-      disabled={disabled}
+    </div>
+    <div className="mb-4">
+      <label htmlFor="omadaB" className="block text-gray-700 text-sm font-bold mb-2">Ομάδα Β</label>
+      <select
+        name="omadaB"
+        id="omadaB"
+        onChange={(e) => setTeamB(e.target.value)}
+        value={teamB}
+        required
+        disabled={disabled}
+        className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       >
-         <option value="" disabled>
-          Επιλέξετε Ομάδα B
-          </option>
-        {teams.filter(o => o.$id !== teamA).map((t)=>{
-          
-          return (
-            <option value={t.$id} key={t.$id}>{t.name}</option>
-          )
-        })}
+        <option value="" disabled>
+          Επιλέξτε Ομάδα Β
+        </option>
+        {teams.filter(o => o.$id !== teamA).map((t) => (
+          <option value={t.$id} key={t.$id}>{t.name}</option>
+        ))}
       </select>
-  </div>
-    <button type="submit">Δημιουργία</button>
-    </form>
-    </>
+    </div>
+    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Προσθήκη</button>
+  </form>
+</>
+
   )
 }
 
