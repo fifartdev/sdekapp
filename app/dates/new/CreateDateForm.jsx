@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState} from 'react'
-import { db, COL_DATES, ID, ODKE_DB, COL_REFS, Query } from '@/utils/appwrite'
+import { db, COL_DATES, ID, ODKE_DB, COL_REFS, Query } from '@/app/utils/appwrite'
 import { useRouter } from 'next/navigation';
 
 export default function CreateDateForm() {

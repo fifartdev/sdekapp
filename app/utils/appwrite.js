@@ -1,6 +1,8 @@
-import { Client, Databases } from "appwrite";
+import { Client, Databases, Account, Teams } from "appwrite";
 
 const client = new Client();
+export const account = new Account(client);
+export const teams = new Teams(client);
 
 client
   .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT)
@@ -15,5 +17,6 @@ export const COL_TEAMS = process.env.NEXT_PUBLIC_APPWRITE_COL_TEAMS;
 export const COL_MATCHES = process.env.NEXT_PUBLIC_APPWRITE_COL_MATCHES;
 export const COL_MASSIGN = process.env.NEXT_PUBLIC_APPWRITE_COL_MASSIGN;
 export const COL_DATES = process.env.NEXT_PUBLIC_APPWRITE_COL_DATES;
+export const ADMIN_TEAM = process.env.NEXT_PUBLIC_APPWRITE_ADMIN_TEAM;
 
 export { ID, Query } from "appwrite";

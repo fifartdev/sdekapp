@@ -1,16 +1,19 @@
 'use client'
 import {useEffect, useState} from 'react'
-import { db, COL_DATES, ID, ODKE_DB, COL_MATCHES, COL_TEAMS, Query } from '@/utils/appwrite'
+import { db, COL_DATES, ID, ODKE_DB, COL_MATCHES, COL_TEAMS, Query } from '@/app/utils/appwrite'
 import { useRouter } from 'next/navigation'
 
 
-export default function CreateMatchForm({date, dateId}) {
+const CreateMatchForm = ({dateId}) => {
     const [teams, setTeams] = useState([])
     const [teamA, setTeamA] = useState('')
     const [teamB, setTeamB] = useState('')
     const [matches, setMatches] = useState([])
     const [disabled, setDisabled] = useState(false)
-       
+    //const [date, setDate] = useState()
+
+    //console.log(dateId);
+    
     // GET ALL TEAMS
     const getTeams = async ()=> { try {
         //FIRST ALL AVAILABLE TEAMS
@@ -19,7 +22,7 @@ export default function CreateMatchForm({date, dateId}) {
         const avTids = []
         availableTeams.map(t=>avTids.push(t.$id))
         //CHECK IF THERE ARE TEAMS WITH MATCHES
-        const data = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('date',date)])
+        const data = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId)])
         const participatingTeams = data.documents[0].match
         const currentTeams = []
         participatingTeams.map(p=>{
@@ -27,7 +30,7 @@ export default function CreateMatchForm({date, dateId}) {
             })
         //SET FINAL AVAILABLE NUMBER
         const final = avTids.filter(item => !currentTeams.includes(item)) 
-        // console.log(final);
+        console.log(final);
         if(final.length === 0){
             setTeams([])
             setDisabled(true)
@@ -45,7 +48,7 @@ export default function CreateMatchForm({date, dateId}) {
     // console.log('FINAL AVAILABLE ARE: ', teams);
     const getCurrentMatches = async () => {
         try {
-            const resp = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('date',date)])
+            const resp = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId)])
             setMatches(resp.documents[0].match)
         } catch (error) {
             console.log('Matches error is: ',error.message);
@@ -60,10 +63,10 @@ export default function CreateMatchForm({date, dateId}) {
         getTeams()
     },[])
 
-   
-    //console.log('Current matches: ', matches);
-    // console.log('DATE IS: ', date);
-    // console.log('DATE ID IS: ', dateId);
+    // console.log('date value is: ', props.date);   
+    // console.log('Current matches: ', matches);
+    //console.log('DATE IS: ', date);
+    console.log('DATE ID IS: ', dateId);
     
     
     const router = useRouter()
@@ -72,15 +75,15 @@ export default function CreateMatchForm({date, dateId}) {
 
         try {
             e.preventDefault()
-            //window.alert(teamA+'-'+teamB)
+            window.alert("Ο Αγώνας Δημιουργήθηκε")
             const newMatch = await db.createDocument(ODKE_DB, COL_MATCHES, ID.unique(), {
             date_id: dateId,
             teams: [teamA, teamB]
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
             console.log('The Match is', newMatch);
-            router.push(`/dates/${dateId}`)
-            router.refresh(`/dates/${dateId}`)
+            router.refresh(`/dates/`)
+            router.push(`/dates/`)
             setTeamA('')
             setTeamB('')
             getCurrentMatches()
@@ -152,3 +155,5 @@ export default function CreateMatchForm({date, dateId}) {
     </>
   )
 }
+
+export default CreateMatchForm
