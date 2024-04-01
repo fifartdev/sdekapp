@@ -10,13 +10,15 @@ const CreateMatchForm = ({dateId}) => {
     const [teamB, setTeamB] = useState('')
     const [matches, setMatches] = useState([])
     const [disabled, setDisabled] = useState(false)
-    //const [date, setDate] = useState()
+    const [date, setDate] = useState()
 
     //console.log(dateId);
     
     // GET ALL TEAMS
     const getTeams = async ()=> { try {
         //FIRST ALL AVAILABLE TEAMS
+        const theDate = await db.getDocument(ODKE_DB, COL_DATES, dateId)
+        setDate(theDate.date)
         const res = await db.listDocuments(ODKE_DB,COL_TEAMS)
         const availableTeams = res.documents        
         const avTids = []
@@ -66,7 +68,7 @@ const CreateMatchForm = ({dateId}) => {
     // console.log('date value is: ', props.date);   
     // console.log('Current matches: ', matches);
     //console.log('DATE IS: ', date);
-    console.log('DATE ID IS: ', dateId);
+    console.log('DATE ID IS: ', date);
     
     
     const router = useRouter()
