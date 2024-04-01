@@ -55,6 +55,8 @@ export default function pageDates() {
         </>
       )}
       <span>|</span>
+      <Link href={'/ref'} className="text-blue-500 hover:underline">Σελίδα Χρήστη</Link>
+      <span>|</span>
       <button onClick={handleLogout} className="text-blue-500 hover:underline">Αποσύνδεση</button>
     </div>
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
