@@ -18,5 +18,6 @@ export const COL_MATCHES = process.env.NEXT_PUBLIC_APPWRITE_COL_MATCHES;
 export const COL_MASSIGN = process.env.NEXT_PUBLIC_APPWRITE_COL_MASSIGN;
 export const COL_DATES = process.env.NEXT_PUBLIC_APPWRITE_COL_DATES;
 export const ADMIN_TEAM = process.env.NEXT_PUBLIC_APPWRITE_ADMIN_TEAM;
+export const COL_ARENAS = process.env.NEXT_PUBLIC_APPWRITE_COL_ARENAS;
 
 export { ID, Query } from "appwrite";

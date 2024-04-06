@@ -16,7 +16,6 @@ const pageDate = ({params}) => {
   const [cDate, setCDate] = useState('')
   const [chosenRef,setChosenRef] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const [refAssignedInMatch,setRefAssignedInMatch] = useState([])
   const [dMatches, setDMatches] = useState([])
   
 
@@ -96,9 +95,9 @@ const pageDate = ({params}) => {
   // console.log('All Date Params', params);
   // console.log('User loggedin is: ', user);
   // console.log('Current Date Data are: ', currentDateData);
-   console.log('Refs in Date: ', refsInDate)
+  // console.log('Refs in Date: ', refsInDate)
   // console.log('Refs Ids: ', refIds);
-   console.log('Date Matches are: ', dMatches);
+  // console.log('Date Matches are: ', dMatches);
   // console.log('Is REF ACTIVE?: ', isRefActiveOnThisDate);
   // console.log('All Matches in Date: ', matches)
   // console.log('Today is', theDate);
@@ -166,8 +165,9 @@ const pageDate = ({params}) => {
         <li key={d.$id} className="bg-white shadow-md rounded-md p-4 mb-4">
           <div>
           <span className='m-3 font-bold' >{d.teams[0].name}</span>-<span className='m-3 font-bold' >{d.teams[1].name}</span>
+          <span className='m-5 font-bold' >Ώρα - {d.matchtime}</span> | <span className='m-5 font-bold' >Γήπεδο - {d.arena}</span>
           </div>
-          <p className="text-gray-700">{d.referees.map((d) => {return <span className='m-3 font-semibold' >{d}</span>})}</p>
+          <p className="text-gray-700">{d.referees.map((d, index) => {return <span key={index} className='m-3 font-semibold' >{d}</span>})}</p>
           <form onSubmit={(e) => {
             e.preventDefault();
             console.log(d.$id, chosenRef);
