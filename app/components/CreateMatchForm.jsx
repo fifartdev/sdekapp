@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState} from 'react'
-import { db, COL_DATES, ID, ODKE_DB, COL_MATCHES, COL_TEAMS, Query, COL_ARENAS } from '@/app/utils/appwrite'
+import { db, COL_DATES, ID, ODKE_DB, COL_MATCHES, COL_REFS, COL_TEAMS, Query, COL_ARENAS } from '@/app/utils/appwrite'
 import { useRouter } from 'next/navigation'
 
 
@@ -14,6 +14,22 @@ const CreateMatchForm = ({dateId}) => {
     const [arenas, setArenas] = useState([])
     const [arena, setArena] = useState('')
     const [matchTime, setMatchTime] = useState('')
+    const [refs, setRefs] = useState([])
+
+    const getAllRefs = async () => {
+
+      try {
+        const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
+        let refIds = []
+        res.map(r=> refIds.push(r.user_id))
+        setRefs(refIds)
+        
+      } catch (error) {
+        console.log('Get all refs error', error.message);
+      }
+
+    }
+
     //console.log(dateId);
 
 
@@ -71,6 +87,10 @@ const CreateMatchForm = ({dateId}) => {
     }
 
     useEffect(()=>{
+      getAllRefs()
+    },[])
+
+    useEffect(()=>{
         getCurrentMatches()
     },[])
 
@@ -82,10 +102,11 @@ const CreateMatchForm = ({dateId}) => {
       getArenas()
     },[])
 
-    // console.log('date value is: ', props.date);   
-    // console.log('Current matches: ', matches);
+  
+    //console.log('Current matches: ', matches);
     //console.log('DATE IS: ', date);
     // console.log('DATE ID IS: ', date);
+    //console.log('Refs are: ', refs);
     
     
     const router = useRouter()
@@ -93,14 +114,18 @@ const CreateMatchForm = ({dateId}) => {
     const handleCreateMatch = async (e) => {
 
         try {
+          if(teamA===teamB){
+            window.alert('Επιλέξετε εκ νέου τις 2 ομάδες!')
+            return 
+          }
             e.preventDefault()
-            window.alert("Ο Αγώνας Δημιουργήθηκε")
             const newMatch = await db.createDocument(ODKE_DB, COL_MATCHES, ID.unique(), {
             date_id: dateId,
             teams: [teamA, teamB],
             arena: arena,
             matchtime: matchTime,
-            fulldate: date
+            fulldate: date,
+            availablereferees:refs
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
             console.log('The Match is', newMatch);
@@ -111,6 +136,7 @@ const CreateMatchForm = ({dateId}) => {
             setArena('')
             getCurrentMatches()
             getTeams()
+            window.alert("Ο Αγώνας Δημιουργήθηκε")
         } catch (error) {
             if(error.code===409){
                 alert('Teams Exist')

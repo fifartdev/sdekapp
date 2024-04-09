@@ -6,33 +6,36 @@ import { useRouter } from 'next/navigation';
 export default function CreateDateForm() {
 
     const [date, setDate] = useState(new Date())
-    const [refs, setRefs] = useState([])
+    //const [refs, setRefs] = useState([])
     const router = useRouter()
 
-    const getAllRefs = async () => {
+    // const getAllRefs = async () => {
 
-      try {
-        const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
-        let refIds = []
-        res.map(r=> refIds.push(r.user_id))
-        setRefs(refIds)
+    //   try {
+    //     const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
+    //     let refIds = []
+    //     res.map(r=> refIds.push(r.user_id))
+    //     setRefs(refIds)
         
-      } catch (error) {
-        console.log('Get all refs error', error.message);
-      }
+    //   } catch (error) {
+    //     console.log('Get all refs error', error.message);
+    //   }
 
-    }
+    // }
 
-    useEffect(()=>{
-      getAllRefs()
-    },[])
+    // useEffect(()=>{
+    //   getAllRefs()
+    // },[])
 
     //console.log("All refs are: ",refs[0]);
 
     const handleCreateDate = async (e) => {
         try {
             e.preventDefault()
-            await db.createDocument(ODKE_DB,COL_DATES,ID.unique(), {date: date, referees:refs})
+            await db.createDocument(ODKE_DB,COL_DATES,ID.unique(), {
+              date: date, 
+              //referees:refs
+            })
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {

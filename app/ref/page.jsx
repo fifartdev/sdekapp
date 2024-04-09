@@ -27,7 +27,9 @@ const refPage = () => {
     }
 
     
-
+    if(!user){
+      redirect('/')
+    }
     
 
     useEffect(()=>{
