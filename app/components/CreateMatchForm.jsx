@@ -99,7 +99,8 @@ const CreateMatchForm = ({dateId}) => {
             date_id: dateId,
             teams: [teamA, teamB],
             arena: arena,
-            matchtime: matchTime
+            matchtime: matchTime,
+            fulldate: date
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
             console.log('The Match is', newMatch);

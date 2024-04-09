@@ -9,11 +9,14 @@ const refPage = () => {
 
     const {user, isUserAdmin, handleLogout} = useAuth()
     const [matches, setMatches] = useState([])
+    const [mdays, setMdays] = useState([])
 
     const getRefMatches = async ()=> {
       try {
         const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [user.name])])
         const final = res.documents
+        console.log('Data are', final);
+        setMdays(final)
         const dts = final.map(d=>d.teams)
         console.log(dts);
         setMatches(dts)      
@@ -22,6 +25,10 @@ const refPage = () => {
         console.log('Error from Refs Page',error.message);
       }
     }
+
+    
+
+    
 
     useEffect(()=>{
       getRefMatches()
@@ -35,7 +42,13 @@ const refPage = () => {
     //     console.log(i[0].name,'-',i[1].name)
     //   )
     // })
-
+    mdays.map((m,index)=>{
+      console.log('Date is: ', m.fulldate);
+      console.log('Time is: ', m.matchtime);
+      console.log('Arena is: ', m.arena);
+      console.log('Teams are');
+      m.teams.map(t=>console.log(t.name));
+    })
     
 
     if(!user){
@@ -62,9 +75,12 @@ const refPage = () => {
 <div className="text-xl font-bold mt-4">Προφίλ {user?.name}</div>
 { !isUserAdmin &&
 <ul>
-  {matches?.map((match, index) => (
+  {mdays?.map((m, index) => (
     <li key={index} className="bg-white shadow-md rounded-md p-4 mb-4">
-      {match[0].name} - {match[1].name}
+      <span className='m-2'><b>Ημ/νία:</b> {new Date(m.fulldate).toLocaleDateString('el-Gr')}</span> 
+      <span className='m-2'><b>Ώρα:</b> { m.matchtime}</span>
+      <span className='m-2'><b>Γήπεδο:</b> { m.arena}</span>
+      <span className='m-2'><b>Ομάδες:</b> { m.teams[0].name} - { m.teams[1].name }</span>
     </li>
   ))}
 </ul>

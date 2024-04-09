@@ -138,28 +138,10 @@ const pageDate = ({params}) => {
   <hr className="my-4" />
   {isUserAdmin && <CreateMatchForm dateId={params.id} />}
   <hr className="my-4" />
-  {matches && (
+  {dMatches && (
     <>
     <h2 className="text-lg font-bold mb-2">Όλοι οι Αγώνες της ημέρας</h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {matches.map((match, index) => (
-        <div key={index} className="bg-white shadow-md rounded-md p-4">
-          <h2 className="text-lg font-bold mb-2">{match[0].name} - {match[1].name}</h2>
-        </div>
-      ))}
-    </div>
-    </>
-  )}
-  <hr className="my-4" />
-  {isUserAdmin && (
-    <>
-    <h2 className="text-lg font-bold mb-2">Όλοι οι διαθέσιμοι διαιτητές αυτής της ημέρας</h2>
-    <ul>
-      {refsInDate?.map((r) => (
-        <li key={r.$id} className="bg-white shadow-md rounded-md p-4 mb-4">{r.name}</li>
-      ))}
-    </ul>
-    <h2 className="text-lg font-bold mb-2">ΟΡΙΣΜΟΙ ΔΙΑΙΤΗΤΩΝ ΑΓΩΝΩΝ</h2>
+    <div className="flex flex-row">
     <ul>
       {dMatches?.map((d, index) => (
         <li key={d.$id} className="bg-white shadow-md rounded-md p-4 mb-4">
@@ -167,6 +149,8 @@ const pageDate = ({params}) => {
           <span className='m-3 font-bold' >{d.teams[0].name}</span>-<span className='m-3 font-bold' >{d.teams[1].name}</span>
           <span className='m-5 font-bold' >Ώρα - {d.matchtime}</span> | <span className='m-5 font-bold' >Γήπεδο - {d.arena}</span>
           </div>
+          {isUserAdmin &&
+          <>
           <p className="text-gray-700">{d.referees.map((d, index) => {return <span key={index} className='m-3 font-semibold' >{d}</span>})}</p>
           <form onSubmit={(e) => {
             e.preventDefault();
@@ -194,7 +178,21 @@ const pageDate = ({params}) => {
             </select>
             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ορισμός</button>
           </form>
+          </>
+}
         </li>
+      ))}
+    </ul>
+    </div>
+    </>
+  )}
+  <hr className="my-4" />
+  {isUserAdmin && (
+    <>
+    <h2 className="text-lg font-bold mb-2">Όλοι οι διαθέσιμοι διαιτητές αυτής της ημέρας</h2>
+    <ul>
+      {refsInDate?.map((r) => (
+        <li key={r.$id} className="bg-white shadow-md rounded-md p-4 mb-4">{r.name}</li>
       ))}
     </ul>
   </>
