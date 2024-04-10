@@ -7,8 +7,6 @@ export default function CreateDateForm() {
 
     const [date, setDate] = useState(new Date())
     //const [refs, setRefs] = useState([])
-    const router = useRouter()
-
     // const getAllRefs = async () => {
 
     //   try {
@@ -55,6 +53,7 @@ export default function CreateDateForm() {
       <label htmlFor="newDate" className="block text-gray-700 text-sm font-bold mb-2">Επιλέξετε Ημερομηνία</label>
       <input
         type="date"
+        min={new Date().toISOString().split("T")[0]}
         id="newDate"
         value={date}
         onChange={(e) => setDate(e.target.value)}

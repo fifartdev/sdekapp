@@ -14,7 +14,13 @@ const pageDate = ({params}) => {
   const [cDate, setCDate] = useState('')
   const [chosenRef,setChosenRef] = useState('')
   const [disabled, setDisabled] = useState(false)
+  const [adminDisabled, setAdminDisabled] = useState(true)
   const [dMatches, setDMatches] = useState([])
+  const [dateDif,setDateDif] = useState(null)
+
+
+  
+
   
 
   const router = useRouter()
@@ -28,6 +34,14 @@ const pageDate = ({params}) => {
       setMatches(data)
       const dateMatches = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.equal('date_id', params.id), Query.orderAsc('matchtime')])
       setDMatches(dateMatches.documents)
+      const today = new Date()
+      const mDate = new Date(res.date)
+      const diffTime = Math.abs(mDate - today);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if(diffDays < 4){
+        setDisabled(true)
+        setAdminDisabled(false)
+      }
     } catch (error) {
       console.log('Any Error in getDateData: ', error.message);
     }
@@ -73,7 +87,9 @@ const pageDate = ({params}) => {
   }
   
   const theDate = new Date(cDate).toLocaleDateString()
+  
 
+  //console.log('Date difference is: ', dateDif);
 
   // console.log('All Date Params', params);
   console.log('User loggedin is: ', user);
@@ -92,7 +108,7 @@ const pageDate = ({params}) => {
   if(!user){
     redirect('/')
   }
-
+  
 
   //if(refIds?.includes(user.$id)){ console.log('Ref is Active'); }
 
@@ -118,13 +134,13 @@ const pageDate = ({params}) => {
           { !isUserAdmin && d.availablereferees.includes(user.$id) ? <><div className="inline-block ml-2 rounded-full bg-green-500 p-1">
       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-      </svg></div> <button onClick={() => removeRefFromMatch(d.$id,user.$id)} className="text-blue-500 hover:underline">Αδυνατώ να συμμετέχω</button></>  : !isUserAdmin && <><div className="inline-block ml-2 rounded-full bg-red-500 p-1">
+      </svg></div> <button onClick={() => removeRefFromMatch(d.$id,user.$id)} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Αδυνατώ να συμμετέχω</button></>  : !isUserAdmin && <><div className="inline-block ml-2 rounded-full bg-red-500 p-1">
       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
-    </div> <button onClick={() => addRefOnMatch(d.$id,user.$id)} className="text-blue-500 hover:underline">Επιθυμώ να συμμετέχω</button></>} 
+    </div> <button onClick={() => addRefOnMatch(d.$id,user.$id)} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Επιθυμώ να συμμετέχω</button></>} 
           </div>
-          { isUserAdmin && <button onClick={() => goToMatch(d.$id)} className="text-blue-500 hover:underline">Περισσότερα</button> }
+          { isUserAdmin && <button onClick={() => goToMatch(d.$id)} className={adminDisabled ? "hidden" : "text-blue-500 hover:underline"} >Περισσότερα</button> }
         </li>
       ))}
     </ul>
