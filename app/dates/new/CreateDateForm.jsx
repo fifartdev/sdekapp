@@ -27,6 +27,9 @@ export default function CreateDateForm() {
 
     //console.log("All refs are: ",refs[0]);
 
+    const today = new Date();
+    const nextFiveDays = new Date(today.setDate(today.getDate() + 7));
+
     const handleCreateDate = async (e) => {
         try {
             e.preventDefault()
@@ -53,7 +56,7 @@ export default function CreateDateForm() {
       <label htmlFor="newDate" className="block text-gray-700 text-sm font-bold mb-2">Επιλέξετε Ημερομηνία</label>
       <input
         type="date"
-        min={new Date().toISOString().split("T")[0]}
+        min={nextFiveDays.toISOString().split("T")[0]}
         id="newDate"
         value={date}
         onChange={(e) => setDate(e.target.value)}
