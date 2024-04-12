@@ -1,35 +1,44 @@
 'use client'
-import {useEffect, useState} from 'react'
+import { useState} from 'react'
 import { db, COL_DATES, ID, ODKE_DB, COL_REFS, Query } from '@/app/utils/appwrite'
 import { useRouter } from 'next/navigation';
 
 export default function CreateDateForm() {
 
     const [date, setDate] = useState(new Date())
-    //const [refs, setRefs] = useState([])
-    // const getAllRefs = async () => {
-
-    //   try {
-    //     const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
-    //     let refIds = []
-    //     res.map(r=> refIds.push(r.user_id))
-    //     setRefs(refIds)
-        
-    //   } catch (error) {
-    //     console.log('Get all refs error', error.message);
-    //   }
-
-    // }
-
-    // useEffect(()=>{
-    //   getAllRefs()
-    // },[])
-
-    //console.log("All refs are: ",refs[0]);
+    
+    
 
     const today = new Date();
     const nextFiveDays = new Date(today.setDate(today.getDate() + 7));
+    const router = useRouter()
 
+    const emails = [
+      "info@fifart.net",
+      "tassospan@outlook.com",
+      "tassos@lexisagency.gr"
+    ]
+    const handleSubmitEmail = async (e,em) => {
+      e.preventDefault();
+      
+      let finalDate = new Date(date).toLocaleDateString('el-GR')
+      
+      try {
+          await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:em, subject:`Στις ${finalDate} Ανακοινώθηκε νέα αγωνιστική`, message:'Νέα Ημερομηνία Αγώνα' }),
+          });
+        
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
+  
+
+  
     const handleCreateDate = async (e) => {
         try {
             e.preventDefault()
@@ -37,6 +46,7 @@ export default function CreateDateForm() {
               date: date, 
               //referees:refs
             })
+            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em,date)})
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {
@@ -64,6 +74,7 @@ export default function CreateDateForm() {
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
     </div>
+    
     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Δημιουργία</button>
   </form>
 </>

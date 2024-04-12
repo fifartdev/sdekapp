@@ -41,6 +41,7 @@ export default function pageDates() {
     redirect('/')
   }
 
+  
 
   return (
     <main className="flex justify-center min-h-screen">
@@ -69,6 +70,7 @@ export default function pageDates() {
         );
       })}
     </ul>
+  
   </div>
   </main>
   )
