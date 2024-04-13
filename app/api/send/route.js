@@ -1,21 +1,7 @@
 import nodemailer from "nodemailer";
 
-// export async function GET() {
-//   try {
-//     return Response.json({ hello: "world" });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// export async function POST(request) {
-//   const data = await request.json();
-//   console.log(data);
-//   return Response.json(data);
-// }
-
 export async function GET() {
-  Response.status(200).json({ message: "GET request received" });
+  return Response.json({ message: "Request Received" });
 }
 
 export async function POST(request) {
@@ -24,12 +10,12 @@ export async function POST(request) {
     console.log(data);
 
     const transporter = nodemailer.createTransport({
-      host: "mail.lexisagency.gr",
+      host: process.env.NEXT_PUBLIC_SMTP_HOST,
       port: 465, // or your SMTP port
       secure: true, // true for 465, false for other ports
       auth: {
-        user: "webmaster@lexisagency.gr", // your email
-        pass: "Supergiot@$9",
+        user: process.env.NEXT_PUBLIC_SMTP_EMAIL, // your email
+        pass: process.env.NEXT_PUBLIC_SMTP_PASSWORD + "$9",
       },
     });
     const info = await transporter.sendMail({
