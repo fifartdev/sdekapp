@@ -71,8 +71,8 @@ export default function AuthProvider({children}) {
     isUserAdmin
    }
 
-   console.log(user);
-   console.log('IS ADMIN', isUserAdmin);
+   //console.log(user);
+   //console.log('IS ADMIN', isUserAdmin);
 
   return (
     <AuthContext.Provider value={data}>

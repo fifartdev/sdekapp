@@ -18,8 +18,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen">
        <div className="w-full p-10">
-        <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΟΣΕΚΑ</h1>
+        <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΣΔΕΚΑ</h1>
     <Login />
+
+    Beta έκδοση 0.0.1 
       </div>
 </main>
 

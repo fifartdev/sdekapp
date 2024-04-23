@@ -15,6 +15,23 @@ const CreateMatchForm = ({dateId}) => {
     const [arena, setArena] = useState('')
     const [matchTime, setMatchTime] = useState('')
     const [refs, setRefs] = useState([])
+    const [emails, setEmails] = useState([])
+    
+
+    const getAllRefsEmails = async ()=>{
+      try {
+        const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.select(["email"])])
+        setEmails(res.documents)
+        
+      } catch (error) {
+        console.log('Error retrieving Refs Emails', error.message);
+      }
+      
+    }
+
+    useEffect(()=>{
+      getAllRefsEmails()
+    },[])
 
     const getAllRefs = async () => {
 
@@ -111,6 +128,25 @@ const CreateMatchForm = ({dateId}) => {
     
     const router = useRouter()
 
+    const handleSubmitEmail = async (e,em,date,ateam,bteam) => {
+      e.preventDefault();
+      
+      let finalDate = new Date(date).toLocaleDateString('el-GR')
+      
+      try {
+          await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:em, subject:`Προστέθηκε νέος Αγώνας στις ${finalDate} και ώρα ${matchTime}`, message:`Ο αγώνας που προστέθηκε είναι o ${ateam}-${bteam}. Έχετε μέχρι και τρία (24ωρα) πριν από την έναρξη του αγώνα για να δηλώσετε τη διαθεσιμότητα σας. Διαφορετικά είσατε αυτομάτως διαθέσιμος/η και μπορείτε να επιλεγείτε.` }),
+          });
+        
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
+
     const handleCreateMatch = async (e) => {
 
         try {
@@ -128,6 +164,7 @@ const CreateMatchForm = ({dateId}) => {
             availablereferees:refs
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
+            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date,newMatch.teams[0].name,newMatch.teams[1].name)})
             console.log('The Match is', newMatch);
             router.refresh(`/dates/`)
             router.push(`/dates/`)
@@ -212,8 +249,8 @@ const CreateMatchForm = ({dateId}) => {
       </select>
     </div>
     <div className="mb-4">
-    <label for="match-time" className="block text-gray-700">Ώρα Αγώνα:</label> 
-    <input value={matchTime} onChange={(e=>setMatchTime(e.target.value))} disabled={disabled} type="time" id="match-time" name="match-time" className="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
+    <label htmlFor="match-time" className="block text-gray-700">Ώρα Αγώνα:</label> 
+    <input value={matchTime} onChange={(e=>setMatchTime(e.target.value))} disabled={disabled} type="time" id="match-time" name="match-time" className="mt-1 block w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required/>
     </div>
     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Προσθήκη</button>
   </form>

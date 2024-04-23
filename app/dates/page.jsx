@@ -53,6 +53,12 @@ export default function pageDates() {
         <>
           <span>|</span>
           <Link href={"/dates/new"} className="text-blue-500 hover:underline">Προσθήκη Αγωνιστικής Ημέρας</Link>
+          <span className="text-gray-500">|</span>
+      <Link href={"/arenas"} className="text-blue-500 hover:underline mx-2">Γήπεδα</Link>
+      <span className="text-gray-500">|</span>
+      <Link href={"/teams"} className="text-blue-500 hover:underline mx-2">Ομάδες</Link>
+      <span className="text-gray-500">|</span>
+      <Link href={"/refs"} className="text-blue-500 hover:underline mx-2">Διαιτητές</Link>
         </>
       )}
       <span>|</span>

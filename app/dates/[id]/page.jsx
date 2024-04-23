@@ -14,7 +14,7 @@ const pageDate = ({params}) => {
   const [cDate, setCDate] = useState('')
   const [chosenRef,setChosenRef] = useState('')
   const [disabled, setDisabled] = useState(false)
-  const [adminDisabled, setAdminDisabled] = useState(true)
+  const [adminDisabled, setAdminDisabled] = useState(false)
   const [dMatches, setDMatches] = useState([])
   const [dateDif,setDateDif] = useState(null)
 
@@ -40,7 +40,7 @@ const pageDate = ({params}) => {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       if(diffDays < 4){
         setDisabled(true)
-        setAdminDisabled(false)
+        // setAdminDisabled(false)
       }
     } catch (error) {
       console.log('Any Error in getDateData: ', error.message);
@@ -92,11 +92,11 @@ const pageDate = ({params}) => {
   //console.log('Date difference is: ', dateDif);
 
   // console.log('All Date Params', params);
-  console.log('User loggedin is: ', user);
+  // console.log('User loggedin is: ', user);
   // console.log('Current Date Data are: ', currentDateData);
   // console.log('Refs in Date: ', refsInDate)
   // console.log('Refs Ids: ', refIds);
-  console.log('Date Matches are: ', dMatches);
+  // console.log('Date Matches are: ', dMatches);
   // console.log('Is REF ACTIVE?: ', isRefActiveOnThisDate);
   // console.log('All Matches in Date: ', matches)
   // console.log('Today is', theDate);

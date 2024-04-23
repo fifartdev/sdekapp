@@ -1,23 +1,35 @@
 'use client'
-import { useState} from 'react'
+import { useEffect, useState} from 'react'
 import { db, COL_DATES, ID, ODKE_DB, COL_REFS, Query } from '@/app/utils/appwrite'
 import { useRouter } from 'next/navigation';
 
 export default function CreateDateForm() {
 
     const [date, setDate] = useState(new Date())
-    
+    const [emails, setEmails] = useState([])
     
 
     const today = new Date();
     const nextFiveDays = new Date(today.setDate(today.getDate() + 7));
     const router = useRouter()
+    
+    const getAllRefsEmails = async ()=>{
+      try {
+        const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.select(["email"])])
+        setEmails(res.documents)
+        
+      } catch (error) {
+        console.log('Error retrieving Refs Emails', error.message);
+      }
+      
+    }
 
-    const emails = [
-      "info@fifart.net",
-      "tassospan@outlook.com",
-      "tassos@lexisagency.gr"
-    ]
+    useEffect(()=>{
+      getAllRefsEmails()
+    },[])
+
+    console.log(emails);
+
     const handleSubmitEmail = async (e,em) => {
       e.preventDefault();
       
@@ -46,7 +58,7 @@ export default function CreateDateForm() {
               date: date, 
               //referees:refs
             })
-            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em,date)})
+            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date)})
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {

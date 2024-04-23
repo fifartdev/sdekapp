@@ -14,6 +14,7 @@ const matchPage = ({params})=>{
     const [chosenRef,setChosenRef] = useState('')
     const [disabled, setDisabled] = useState(false)
     const [assignedRefs,setAssignedRefs] = useState([])
+    const [chosenRefEmail, setChosenRefEmail] = useState([])
 
     const router = useRouter()
 
@@ -26,10 +27,30 @@ const matchPage = ({params})=>{
             setTeams(res.teams)
             const refs = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('user_id', res.availablereferees)])
             setRefsInMatch(refs.documents)
+            const emailsRes = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('name', res?.referees), Query.select('email')])
+            setChosenRefEmail(emailsRes.documents)
         } catch (error) {
             console.log('Error on Match Page', error.message);
         }   
     }
+
+    const handleSubmitEmail = async (e,date,ateam,bteam,arena,time) => {
+      e.preventDefault();
+      try {
+        chosenRefEmail.forEach(async (em) => {
+          await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: em.email, subject:`Έχετε οριστεί σε αγώνα στις ${date}`, message: `Οριστίκατε σε αγώνα ${ateam}-${bteam}, στο Γήπεδο ${arena}, ώρα ${time}.` }),
+          });
+        })
+        window.alert('Μήνυμα Εστάλη!')
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
 
     const handleAssignRefInMatch = async ()=>{
         try {
@@ -58,8 +79,10 @@ const matchPage = ({params})=>{
     let date = new Date(match.fulldate).toLocaleDateString('el-GR')
 
     //console.log('Match data: ', teams[0]);
-    console.log('Refs in Match: ', refsInMatch);
-    console.log('Assigned Refs: ', assignedRefs);
+    //console.log('Refs in Match: ', refsInMatch);
+    //console.log('Assigned Refs: ', assignedRefs);
+    //console.log('Chosen Ref:', chosenRef);
+    console.log('Chosen Ref Email is:', chosenRefEmail);
 
     const { user } = useAuth()
 
@@ -117,10 +140,15 @@ const matchPage = ({params})=>{
         </tr>
       </tbody>
     </table>
- </>
+  </>
  
  : null }
 </div>
+{ assignedRefs !=0 ? <div className="flex w-full justify-center text-center p-10">
+
+    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={(e)=>handleSubmitEmail(e,date,teams[0].name,teams[1].name,match.arena,match.matchtime)}>Αποστολή Ενημέρωσης</button>
+
+   </div> : null }
 </div>
 
         <form onSubmit={(e) => {
