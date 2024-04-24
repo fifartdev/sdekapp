@@ -13,14 +13,36 @@ const matchPage = ({params})=>{
     const [teams, setTeams] = useState([])
     const [chosenRef,setChosenRef] = useState('')
     const [disabled, setDisabled] = useState(false)
+    const [disabledA, setDisabledA] = useState(false)
+    const [disabledB, setDisabledB] = useState(false)
+    const [disabledC, setDisabledC] = useState(false)
     const [assignedRefs,setAssignedRefs] = useState([])
     const [chosenRefEmail, setChosenRefEmail] = useState([])
+    const [refA, setRefA] = useState('')
+    const [refB, setRefB] = useState('')
+    const [komisario, setKomisario] = useState('')
+
 
     const router = useRouter()
 
     const getMatchData = async ()=>{
         try {
             const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
+            if(res.refA != ''){
+              setDisabledA(true)
+            } else {
+              setDisabledA(false)
+            }
+            if(res.refB != ''){
+              setDisabledB(true)
+            } else {
+              setDisabledB(false)
+            }
+            if(res.komisario != ''){
+              setDisabledC(true)
+            } else {
+              setDisabledC(false)
+            }
             setMatch(res)
             setRefIds(res.availablereferees)
             setAssignedRefs(res.referees)
@@ -34,7 +56,12 @@ const matchPage = ({params})=>{
         }   
     }
 
-    const handleSubmitEmail = async (e,date,ateam,bteam,arena,time) => {
+    const updateMatchEmails = async ()=>{
+            const emailsRes = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('name', assignedRefs), Query.select('email')])
+            setChosenRefEmail(emailsRes.documents)
+    }
+
+    const handleSubmitEmail = async (e,date,ateam,bteam,arena,time,refa,refb,kom) => {
       e.preventDefault();
       try {
         chosenRefEmail.forEach(async (em) => {
@@ -43,7 +70,7 @@ const matchPage = ({params})=>{
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: em.email, subject:`Έχετε οριστεί σε αγώνα στις ${date}`, message: `Οριστίκατε σε αγώνα ${ateam}-${bteam}, στο Γήπεδο ${arena}, ώρα ${time}.` }),
+            body: JSON.stringify({ email: em.email, subject:`Έχετε οριστεί σε αγώνα στις ${date}`, message: `Οριστίκατε σε αγώνα ${ateam}-${bteam}, στο Γήπεδο ${arena}, ώρα ${time}.Οι ορισμοί έχουν ως εξής. Διαιτητής Α: ${refa}, Διαιτητής Β: ${refb}, Κομισάριος: ${kom}` }),
           });
         })
         window.alert('Μήνυμα Εστάλη!')
@@ -52,26 +79,129 @@ const matchPage = ({params})=>{
       }
     };
 
-    const handleAssignRefInMatch = async ()=>{
-        try {
-          if(assignedRefs.length === 3){
-            window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
-            return
-          }
-          // if(assignedRefs.includes(chosenRef)){
-          //   window.alert('O συγκερκιμένος διατητής έχει ήδη οριστεί σε αυτό τον αγώνα')
-          //   return
-          // }
-          if(chosenRef!==null){
-            await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,chosenRef]})
-            getMatchData()
-          }
-        } catch (error) {
-          console.log('Error in assignment', error.message);
+    // const handleAssignRefInMatch = async ()=>{
+    //     try {
+    //       if(assignedRefs.length === 3){
+    //         window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
+    //         return
+    //       }
+    //       // if(assignedRefs.includes(chosenRef)){
+    //       //   window.alert('O συγκερκιμένος διατητής έχει ήδη οριστεί σε αυτό τον αγώνα')
+    //       //   return
+    //       // }
+    //       if(chosenRef!==null){
+    //         await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,chosenRef]})
+    //         getMatchData()
+    //       }
+    //     } catch (error) {
+    //       console.log('Error in assignment', error.message);
+    //     }
+    //   }
+    // ASIGNED REFS IN MATCHES FUNCTIONS  
+    const handleAssignRefA = async () => {
+      try {
+        if(assignedRefs.length === 3){
+        window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
+                  return
+                }
+        if(refA!==null){
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:refA})
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,refA]})
+          setDisabledA(true)
+          getMatchData()
         }
+      } catch (error) {
+        console.log('Error assigning refA: ', error.message);
       }
+    }
 
+    const handleAssignRefB = async () => {
+      try {
+        if(assignedRefs.length === 3){
+        window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
+                  return
+                }
+        if(refB!==null){
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:refB})
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,refB]})
+          getMatchData()
+        }
+      } catch (error) {
+        console.log('Error assigning refB: ', error.message);
+      }
+    }
 
+    const handleKomissario = async () => {
+      try {
+        if(assignedRefs.length === 3){
+        window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
+                  return
+                }
+        if(komisario!==null){
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:komisario})
+          await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,komisario]})
+          getMatchData()
+        }
+      } catch (error) {
+        console.log('Error assigning komisario: ', error.message);
+      }
+    }
+    // END OF ASIGNED REFS IN MATCHES FUNCTIONS
+
+    // REMOVE REFS FROM MATCHES FUNCTIONS
+    const removeRefAfromMatch = async (ref)=> {
+      try {
+        const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
+        if(res.refA === res.komisario){
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        }
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:''})
+        const newList = assignedRefs.filter(r => r !== ref) 
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
+      } catch (error) {
+        console.log('Remove Ref from Match: ', error.message);
+      } finally{
+        getMatchData()
+        updateMatchEmails()
+      }
+    }
+    const removeRefBfromMatch = async (ref)=> {
+      try {
+        const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
+        if(res.refB === res.komisario){
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        }
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:''})
+        const newList = assignedRefs.filter(r => r !== ref) 
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
+      } catch (error) {
+        console.log('Remove Ref from Match: ', error.message);
+      } finally {
+        getMatchData()
+        updateMatchEmails()
+      }
+    }
+
+    const removeKomisariofromMatch = async (ref)=> {
+      try {
+        const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
+        if(res.komisario === res.refA){
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:''})
+        } else if(res.komisario === res.refB){
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:''})
+        }
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        const newList = assignedRefs.filter(r => r !== ref) 
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
+      } catch (error) {
+        console.log('Remove Ref from Match: ', error.message);
+      } finally {
+        getMatchData()
+        updateMatchEmails()
+      }
+    }
+
+    // END OF REMOVE REFS FROM MATCHES FUNCTIONS
     useEffect(()=>{
         getMatchData()
     },[])
@@ -118,7 +248,6 @@ const matchPage = ({params})=>{
     </table>
   </div>
   <div className='flex justify-center w-full my-5'>
-{ assignedRefs !=0 ? 
    <>
   <table className="table-auto border border-gray-300">
       <thead>
@@ -130,48 +259,86 @@ const matchPage = ({params})=>{
       </thead>
       <tbody>
         <tr>
-        {
-        assignedRefs?.map((r,index)=>{
-            return (
-                <td key={index} className="border px-4 py-2">{r}</td>
-            )
-        })
-    }
+          <td className="border px-4 py-2">{match.refA} {match.refA && <button onClick={()=>removeRefAfromMatch(match.refA)} className="bg-red-500 hover:bg-red-700 text-white p-1">Αφαίρεση</button>}</td>
+          <td className="border px-4 py-2">{match.refB} {match.refB && <button onClick={()=>removeRefBfromMatch(match.refB)} className="bg-red-500 hover:bg-red-700 text-white p-1">Αφαίρεση</button>}</td>
+          <td className="border px-4 py-2">{match.komisario} {match.komisario && <button onClick={()=>removeKomisariofromMatch(match.komisario)} className="bg-red-500 hover:bg-red-700 text-white p-1">Αφαίρεση</button>}</td>
         </tr>
       </tbody>
     </table>
   </>
- 
- : null }
 </div>
 { assignedRefs !=0 ? <div className="flex w-full justify-center text-center p-10">
 
-    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={(e)=>handleSubmitEmail(e,date,teams[0].name,teams[1].name,match.arena,match.matchtime)}>Αποστολή Ενημέρωσης</button>
+    <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={(e)=>handleSubmitEmail(e,date,teams[0].name,teams[1].name,match.arena,match.matchtime,match.refA,match.refB,match.komisario)}>Αποστολή Ενημέρωσης</button>
 
    </div> : null }
 </div>
 
         <form onSubmit={(e) => {
             e.preventDefault();
-            handleAssignRefInMatch();
-            setChosenRef('');
+            handleAssignRefA('')
+            setRefA('')
           }}>
-            <label htmlFor={'ref'}>Ορισμός Διατητή</label>
+            <label htmlFor={'refa'}>Ορισμός Διατητή A</label>
             <select
-              name={'ref'}
-              id={'ref'}
-              onChange={(e) => setChosenRef(e.target.value)}
-              value={chosenRef}
+              name={'refa'}
+              id={'refa'}
+              onChange={(e) => setRefA(e.target.value)}
+              value={refA}
               required
-              disabled={disabled}
+              disabled={disabledA}
               className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             >
-              <option value="">Επιλέξτε Διαιτητή</option>
+              <option value="">Επιλέξτε Διαιτητή A</option>
               {refsInMatch.map((r) => (
                 <option value={r.name} key={r.$id}>{r.name}</option>
               ))}
             </select>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ορισμός</button>
+            <button disabled={disabledA} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ορισμός</button>
+          </form>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            handleAssignRefB();
+            setRefB('');
+          }}>
+            <label htmlFor={'refb'}>Ορισμός Διατητή B</label>
+            <select
+              name={'refb'}
+              id={'refb'}
+              onChange={(e) => setRefB(e.target.value)}
+              value={refB}
+              required
+              disabled={disabledB}
+              className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="">Επιλέξτε Διαιτητή B</option>
+              {refsInMatch.map((r) => (
+                <option value={r.name} key={r.$id}>{r.name}</option>
+              ))}
+            </select>
+            <button disabled={disabledB} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ορισμός</button>
+          </form>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            handleKomissario();
+            setKomisario('');
+          }}>
+            <label htmlFor={'kom'}>Ορισμός Κομισάριου</label>
+            <select
+              name={'kom'}
+              id={'kom'}
+              onChange={(e) => setKomisario(e.target.value)}
+              value={komisario}
+              required
+              disabled={disabledC}
+              className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            >
+              <option value="">Επιλέξτε Κομισάριο</option>
+              {refsInMatch.map((r) => (
+                <option value={r.name} key={r.$id}>{r.name}</option>
+              ))}
+            </select>
+            <button disabled={disabledC} type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ορισμός</button>
           </form>
         </div>
         </main>
