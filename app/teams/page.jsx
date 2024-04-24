@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
-import { ODKE_DB, COL_TEAMS, db, ID } from "../utils/appwrite"
+import { ODKE_DB, COL_TEAMS, db, ID, Query } from "../utils/appwrite"
 import { useRouter, redirect } from "next/navigation"
 import Link from "next/link"
 
@@ -37,7 +37,7 @@ const teamPage = ()=> {
 
     const getAllTeams = async ()=> {
         try {
-            const res = await db.listDocuments(ODKE_DB, COL_TEAMS)
+            const res = await db.listDocuments(ODKE_DB, COL_TEAMS, [Query.limit(200)])
             setTeams(res.documents)
         } catch (error) {
             console.log('Error list teams', error.message);

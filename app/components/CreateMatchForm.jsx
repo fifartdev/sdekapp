@@ -20,7 +20,7 @@ const CreateMatchForm = ({dateId}) => {
 
     const getAllRefsEmails = async ()=>{
       try {
-        const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.select(["email"])])
+        const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.select(["email"]), Query.limit(200)])
         setEmails(res.documents)
         
       } catch (error) {
@@ -36,7 +36,7 @@ const CreateMatchForm = ({dateId}) => {
     const getAllRefs = async () => {
 
       try {
-        const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id')])).documents
+        const res = (await db.listDocuments(ODKE_DB,COL_REFS, [ Query.select('user_id'), Query.limit(200)])).documents
         let refIds = []
         res.map(r=> refIds.push(r.user_id))
         setRefs(refIds)
@@ -52,7 +52,7 @@ const CreateMatchForm = ({dateId}) => {
 
     const getArenas = async ()=> {
       try {
-        const res = await db.listDocuments(ODKE_DB,COL_ARENAS)
+        const res = await db.listDocuments(ODKE_DB,COL_ARENAS, [Query.limit(200)])
         setArenas(res.documents)
       } catch (error) {
         console.log('ARENA ERROR: ', error.message);
@@ -65,12 +65,12 @@ const CreateMatchForm = ({dateId}) => {
         //FIRST ALL AVAILABLE TEAMS
         const theDate = await db.getDocument(ODKE_DB, COL_DATES, dateId)
         setDate(theDate.date)
-        const res = await db.listDocuments(ODKE_DB,COL_TEAMS)
+        const res = await db.listDocuments(ODKE_DB,COL_TEAMS, [Query.limit(200)])
         const availableTeams = res.documents        
         const avTids = []
         availableTeams.map(t=>avTids.push(t.$id))
         //CHECK IF THERE ARE TEAMS WITH MATCHES
-        const data = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId)])
+        const data = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId), Query.limit(200)])
         const participatingTeams = data.documents[0].match
         const currentTeams = []
         participatingTeams.map(p=>{
@@ -85,7 +85,8 @@ const CreateMatchForm = ({dateId}) => {
         } else {
 
             const definiteData = await db.listDocuments(ODKE_DB, COL_TEAMS, [
-                Query.equal('$id', final)
+                Query.equal('$id', final),
+                Query.limit(200)
             ])
             setTeams(definiteData.documents)
         }
@@ -96,7 +97,7 @@ const CreateMatchForm = ({dateId}) => {
     // console.log('FINAL AVAILABLE ARE: ', teams);
     const getCurrentMatches = async () => {
         try {
-            const resp = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId)])
+            const resp = await db.listDocuments(ODKE_DB, COL_DATES, [Query.equal('$id',dateId), Query.limit(200)])
             setMatches(resp.documents[0].match)
         } catch (error) {
             console.log('Matches error is: ',error.message);

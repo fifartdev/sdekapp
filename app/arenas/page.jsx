@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
-import { ODKE_DB, COL_ARENAS, db, ID } from "../utils/appwrite"
+import { ODKE_DB, COL_ARENAS, db, ID, Query } from "../utils/appwrite"
 import { useRouter, redirect } from "next/navigation"
 import Link from "next/link"
 
@@ -37,7 +37,7 @@ const arenaPage = ()=> {
 
     const getAllArenas = async ()=> {
         try {
-            const res = await db.listDocuments(ODKE_DB, COL_ARENAS)
+            const res = await db.listDocuments(ODKE_DB, COL_ARENAS, [Query.limit(200)])
             setArenas(res.documents)
         } catch (error) {
             console.log('Error list arenas', error.message);

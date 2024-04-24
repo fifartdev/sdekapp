@@ -14,7 +14,7 @@ const refPage = () => {
 
     const getRefMatches = async ()=> {
       try {
-        const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [user.name])])
+        const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [user.name]), Query.limit(200)])
         const final = res.documents
         console.log('Data are', final);
         setMdays(final)

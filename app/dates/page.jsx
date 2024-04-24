@@ -24,7 +24,7 @@ export default function pageDates() {
   const getData = async () => {
 
     try {
-      const res = await db.listDocuments(ODKE_DB,COL_DATES, [Query.orderAsc('date')])
+      const res = await db.listDocuments(ODKE_DB,COL_DATES, [Query.orderAsc('date'), Query.limit(200)])
       setMatchDates(res.documents)
       
     } catch (error) {

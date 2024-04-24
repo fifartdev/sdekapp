@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
-import { ODKE_DB, COL_REFS, db, ID, account  } from "../utils/appwrite"
+import { ODKE_DB, COL_REFS, db, ID, account, Query  } from "../utils/appwrite"
 import { useRouter, redirect } from "next/navigation"
 import Link from "next/link"
 
@@ -53,7 +53,7 @@ const refsPage = ()=> {
 
     const getAllRefs = async ()=> {
         try {
-            const res = await db.listDocuments(ODKE_DB, COL_REFS)
+            const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.limit(200)])
             setRefs(res.documents)
         } catch (error) {
             console.log('Error list refs', error.message);

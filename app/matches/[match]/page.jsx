@@ -47,7 +47,10 @@ const matchPage = ({params})=>{
             setRefIds(res.availablereferees)
             setAssignedRefs(res.referees)
             setTeams(res.teams)
-            const refs = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('user_id', res.availablereferees)])
+            const refs = await db.listDocuments(ODKE_DB, COL_REFS,[
+              Query.equal('user_id', res.availablereferees),
+              Query.limit(100)
+            ])
             setRefsInMatch(refs.documents)
             const emailsRes = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('name', res?.referees), Query.select('email')])
             setChosenRefEmail(emailsRes.documents)
@@ -99,6 +102,8 @@ const matchPage = ({params})=>{
     //       console.log('Error in assignment', error.message);
     //     }
     //   }
+
+
     // ASIGNED REFS IN MATCHES FUNCTIONS  
     const handleAssignRefA = async () => {
       try {
@@ -210,8 +215,8 @@ const matchPage = ({params})=>{
     
     let date = new Date(match.fulldate).toLocaleDateString('el-GR')
 
-    //console.log('Match data: ', teams[0]);
-    // console.log('Refs in Match: ', refsInMatch);
+    console.log('Match data: ', match);
+    console.log('Refs in Match: ', refsInMatch);
     // console.log('Assigned Refs: ', assignedRefs);
     // console.log('Chosen Refs:', refIds);
     console.log('Chosen Ref Email is:', chosenRefEmail);
