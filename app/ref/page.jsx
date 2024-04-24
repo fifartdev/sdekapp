@@ -16,10 +16,10 @@ const refPage = () => {
       try {
         const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [user.name]), Query.limit(200)])
         const final = res.documents
-        console.log('Data are', final);
+        //console.log('Data are', final);
         setMdays(final)
         const dts = final.map(d=>d.teams)
-        console.log(dts);
+        //console.log(dts);
         setMatches(dts)      
         
       } catch (error) {
@@ -37,7 +37,7 @@ const refPage = () => {
       getRefMatches()
     },[])
 
-    console.log('Refs Matches are: ', matches);
+    //console.log('Refs Matches are: ', matches);
 
     // matches.map((i)=>{
     //   return(
@@ -45,13 +45,13 @@ const refPage = () => {
     //     console.log(i[0].name,'-',i[1].name)
     //   )
     // })
-    mdays.map((m,index)=>{
-      console.log('Date is: ', m.fulldate);
-      console.log('Time is: ', m.matchtime);
-      console.log('Arena is: ', m.arena);
-      console.log('Teams are');
-      m.teams.map(t=>console.log(t.name));
-    })
+    // mdays.map((m,index)=>{
+    //   console.log('Date is: ', m.fulldate);
+    //   console.log('Time is: ', m.matchtime);
+    //   console.log('Arena is: ', m.arena);
+    //   console.log('Teams are');
+    //   m.teams.map(t=>console.log(t.name));
+    // })
     
 
     if(!user){
