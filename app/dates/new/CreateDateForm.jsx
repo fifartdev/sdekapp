@@ -10,7 +10,7 @@ export default function CreateDateForm() {
     
 
     const today = new Date();
-    const nextFiveDays = new Date(today.setDate(today.getDate() + 7));
+    const nextFiveDays = new Date(today.setDate(today.getDate() + 2));
     const router = useRouter()
     
     const getAllRefsEmails = async ()=>{

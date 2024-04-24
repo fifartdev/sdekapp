@@ -58,10 +58,10 @@ const matchPage = ({params})=>{
             window.alert('Έχουν οριστοί όλοι οι διαιτητές σε αυτό τον αγώνα')
             return
           }
-          if(assignedRefs.includes(chosenRef)){
-            window.alert('O συγκερκιμένος διατητής έχει ήδη οριστεί σε αυτό τον αγώνα')
-            return
-          }
+          // if(assignedRefs.includes(chosenRef)){
+          //   window.alert('O συγκερκιμένος διατητής έχει ήδη οριστεί σε αυτό τον αγώνα')
+          //   return
+          // }
           if(chosenRef!==null){
             await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:[...assignedRefs,chosenRef]})
             getMatchData()

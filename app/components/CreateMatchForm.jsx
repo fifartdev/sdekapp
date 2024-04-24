@@ -78,7 +78,7 @@ const CreateMatchForm = ({dateId}) => {
             })
         //SET FINAL AVAILABLE NUMBER
         const final = avTids.filter(item => !currentTeams.includes(item)) 
-        console.log(final);
+        //console.log(final);
         if(final.length === 0){
             setTeams([])
             setDisabled(true)
@@ -165,9 +165,7 @@ const CreateMatchForm = ({dateId}) => {
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
             emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date,newMatch.teams[0].name,newMatch.teams[1].name)})
-            console.log('The Match is', newMatch);
-            router.refresh(`/dates/`)
-            router.push(`/dates/`)
+            //console.log('The Match is', newMatch);
             setTeamA('')
             setTeamB('')
             setArena('')
@@ -180,6 +178,9 @@ const CreateMatchForm = ({dateId}) => {
             } else {
                 console.log(error.message);
             }
+        } finally {
+            router.replace(`/dates/`)
+            router.refresh()
         }
         
     }

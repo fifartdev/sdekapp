@@ -66,21 +66,6 @@ return(
       <div className="w-full p-10">
       <div className="flex items-center">
   <Link href={"/"} className="text-blue-500 hover:underline mr-2">Αρχική</Link>
-  {isUserAdmin && (
-    <>
-      <span className="text-gray-500">|</span>
-      <Link href={"/dates/new"} className="text-blue-500 hover:underline mx-2">Προσθήκη Αγωνιστικής Ημέρας</Link>
-      <span className="text-gray-500">|</span>
-      <Link href={"/arenas"} className="text-blue-500 hover:underline mx-2">Γήπεδα</Link>
-      <span className="text-gray-500">|</span>
-      <Link href={"/teams"} className="text-blue-500 hover:underline mx-2">Ομάδες</Link>
-      <span className="text-gray-500">|</span>
-      <Link href={"/refs"} className="text-blue-500 hover:underline mx-2">Διατητές</Link>
-    </>
-  )}
-  <span className="text-gray-500">|</span>
-  <Link href={'/ref'} className="text-blue-500 hover:underline mx-2">Σελίδα Χρήστη</Link>
-  <span className="text-gray-500">|</span>
   <button onClick={handleLogout} className="text-blue-500 hover:underline ml-2">Αποσύνδεση</button>
 </div>
             <h1>Σελίδα Προσθήκης Διαιτητή </h1>
