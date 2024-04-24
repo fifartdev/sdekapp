@@ -61,7 +61,9 @@ const refPage = () => {
     return (
       <main className="flex justify-center min-h-screen">
       <div className="w-full p-10">
-      <div className="text-xl font-bold mb-4">Σελίδα Χρήστη</div>
+       <div className='flex justify-center bg-cyan-500 p-5'>
+        <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
+      </div>
       <nav className="flex items-center justify-between flex-wrap bg-blue-800 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <Link href="/">
@@ -142,6 +144,7 @@ const refPage = () => {
   <span className="text-gray-500">|</span>
   <button onClick={handleLogout} className="text-blue-500 hover:underline ml-2">Αποσύνδεση</button>
 </div> */}
+<div className="text-xl font-bold mb-4">Σελίδα Χρήστη</div>
 <div className="text-xl font-bold mt-4">Προφίλ {user?.name}</div>
 { !isUserAdmin &&
 <ul>

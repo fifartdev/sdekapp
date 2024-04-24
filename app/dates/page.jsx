@@ -46,7 +46,9 @@ export default function pageDates() {
   return (
     <main className="flex justify-center min-h-screen">
        <div className="w-full p-10">
-    <div>Ημερομηνίες Αγώνων</div>
+       <div className='flex justify-center bg-cyan-500 p-5'>
+        <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
+      </div>
     {/* <div className="flex items-center">
       <Link href={"/"} className="text-blue-500 hover:underline">Αρχική</Link>
       {isUserAdmin && (
@@ -66,6 +68,7 @@ export default function pageDates() {
       <span>|</span>
       <button onClick={handleLogout} className="text-blue-500 hover:underline">Αποσύνδεση</button>
     </div> */}
+     
   <nav className="flex items-center justify-between flex-wrap bg-blue-800 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <Link href="/">
@@ -133,6 +136,7 @@ export default function pageDates() {
         </div>
       </div>
     </nav>
+    <div>Ημερομηνίες Αγώνων</div>
     <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
       {matchDates.map(d => {
         let hDate = new Date(d.date).toLocaleDateString('el-GR');

@@ -18,7 +18,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen">
        <div className="w-full p-10">
-        <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΣΔΕΚΑ</h1>
+      <div className='flex justify-center bg-cyan-500 p-5'>
+        <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
+      </div>
+        <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΚΕΔ ΟΣΕΚΑ</h1>
     <Login />
 
     Beta έκδοση 0.0.1 

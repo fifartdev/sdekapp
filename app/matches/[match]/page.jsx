@@ -223,6 +223,9 @@ const matchPage = ({params})=>{
     return (
         <main className="flex justify-center min-h-screen">
         <div className="w-full text-center p-10">
+        <div className='flex justify-center bg-cyan-500 p-5 mb-10'>
+        <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
+      </div>
         <button onClick={()=>router.back()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >Πίσω στην Αγωνιστική</button>
         <div className="bg-white shadow-md rounded-md p-4 mb-4">
   <h1 className="text-lg font-bold mb-2">{date}</h1>

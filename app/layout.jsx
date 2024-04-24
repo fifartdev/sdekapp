@@ -5,8 +5,8 @@ import { Providers } from "./components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "ΟΣΕΚΑ ΟΔΚΕ ΟΡΙΣΜΟΙ ΔΙΑΙΤΗΤΩΝ",
-  description: "ΟΣΕΚΑ ΟΔΚΕ ΟΡΙΣΜΟΙ ΔΙΑΙΤΗΤΩΝ",
+  title: "Εφαρμογή Ορισμών Διαιτητών - ΚΕΔ ΟΣΕΚΑ",
+  description: "Εφαρμογή Ορισμών Διαιτητών - ΚΕΔ ΟΣΕΚΑ",
 };
 
 export default function RootLayout({ children }) {
