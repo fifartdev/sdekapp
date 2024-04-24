@@ -30,24 +30,24 @@ export default function CreateDateForm() {
 
     console.log(emails);
 
-    const handleSubmitEmail = async (e,em) => {
-      e.preventDefault();
+    // const handleSubmitEmail = async (e,em) => {
+    //   e.preventDefault();
       
-      let finalDate = new Date(date).toLocaleDateString('el-GR')
+    //   let finalDate = new Date(date).toLocaleDateString('el-GR')
       
-      try {
-          await fetch('/api/send', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email:em, subject:`Στις ${finalDate} Ανακοινώθηκε νέα αγωνιστική`, message:'Νέα Ημερομηνία Αγώνα' }),
-          });
+    //   try {
+    //       await fetch('/api/send', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ email:em, subject:`Στις ${finalDate} Ανακοινώθηκε νέα αγωνιστική`, message:'Νέα Ημερομηνία Αγώνα' }),
+    //       });
         
-      } catch (err) {
-        console.error('Failed to send email:', err);
-      }
-    };
+    //   } catch (err) {
+    //     console.error('Failed to send email:', err);
+    //   }
+    // };
   
 
   
@@ -58,7 +58,7 @@ export default function CreateDateForm() {
               date: date, 
               //referees:refs
             })
-            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date)})
+            //emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date)})
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {

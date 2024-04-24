@@ -14,21 +14,29 @@ const refsPage = ()=> {
     const [password, setPassword] = useState('')
     const [refs, setRefs] = useState([])
     const [isOpen, setIsOpen] = useState(false);
+    const [index, setIndex] = useState('')
+    const [landline, setLandline] = useState('')
+    const [mobile, setMobile] = useState('')
+    const [category, setCategory] = useState('')
 
     const handleAddRef = async (e) => {
         e.preventDefault()
         try {
             const newaccount = await account.create(ID.unique(), email, password, name)
             if(newaccount){
-                await db.createDocument(ODKE_DB, COL_REFS, ID.unique(), { name: name, user_id: newaccount.$id, email: email })
+                await db.createDocument(ODKE_DB, COL_REFS, ID.unique(), { name: name, user_id: newaccount.$id, email: email, index:index,landline:landline,mobile:mobile,category:category })
             }
             setEmail('')
             setPassword('')
             setName('')
+            setLandline('')
+            setMobile('')
+            setCategory('')
+
             getAllRefs()
             router.refresh()
         } catch (error) {
-            console.log('Error in Arenas', error.message);
+            console.log('Error in Refs', error.message);
         }
     }
 
@@ -165,8 +173,57 @@ return(
         required
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
+      <label htmlFor="index" className="block text-gray-700 text-sm font-bold mb-2">A/A</label>
+        <input
+        type="number"
+        id="index"
+        value={index}
+        onChange={(e)=>setIndex(e.target.value)}
+        required
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      />
+      <label htmlFor="landline" className="block text-gray-700 text-sm font-bold mb-2">Σταθερό</label>
+        <input
+        type="text"
+        id="landline"
+        value={landline}
+        onChange={(e)=>setLandline(e.target.value)}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      />
+      <label htmlFor="mobile" className="block text-gray-700 text-sm font-bold mb-2">Κινητό</label>
+        <input
+        type="text"
+        id="mobile"
+        value={mobile}
+        onChange={(e)=>setMobile(e.target.value)}        
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      />
+      <label htmlFor="category" className="block text-gray-700 text-sm font-bold mb-2">ΚΑΤΗΓΟΡΙΑ</label>
+      <select
+        name="category"
+        id="category"
+        onChange={(e) => setCategory(e.target.value)}
+        value={category}
+        required
+        className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option value="" disabled>
+          Επιλέξτε Κατηγορία
+        </option>
+        <option value="ΔΙΕΘΝΗΣ">
+         ΔΙΕΘΝΗΣ
+        </option>
+        <option value="Α ΚΑΤΗΓΟΡΙΑ">
+          Α ΚΑΤΗΓΟΡΙΑ
+        </option>
+        <option value="Β ΚΑΤΗΓΟΡΙΑ">
+          Β ΚΑΤΗΓΟΡΙΑ
+        </option>
+        <option value="ΔΟΚΙΜΟΣ">
+          ΔΟΚΙΜΟΣ
+        </option>
+      </select>
     </div>
-    
     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Προσθήκη</button>
     </form>
         <hr />

@@ -128,24 +128,24 @@ const CreateMatchForm = ({dateId}) => {
     
     const router = useRouter()
 
-    const handleSubmitEmail = async (e,em,date,ateam,bteam) => {
-      e.preventDefault();
+    // const handleSubmitEmail = async (e,em,date,ateam,bteam) => {
+    //   e.preventDefault();
       
-      let finalDate = new Date(date).toLocaleDateString('el-GR')
+    //   let finalDate = new Date(date).toLocaleDateString('el-GR')
       
-      try {
-          await fetch('/api/send', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email:em, subject:`Προστέθηκε νέος Αγώνας στις ${finalDate} και ώρα ${matchTime}`, message:`Ο αγώνας που προστέθηκε είναι o ${ateam}-${bteam}. Έχετε μέχρι και τρία (24ωρα) πριν από την έναρξη του αγώνα για να δηλώσετε τη διαθεσιμότητα σας. Διαφορετικά είσατε αυτομάτως διαθέσιμος/η και μπορείτε να επιλεγείτε.` }),
-          });
+    //   try {
+    //       await fetch('/api/send', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ email:em, subject:`Προστέθηκε νέος Αγώνας στις ${finalDate} και ώρα ${matchTime}`, message:`Ο αγώνας που προστέθηκε είναι o ${ateam}-${bteam}. Έχετε μέχρι και τρία (24ωρα) πριν από την έναρξη του αγώνα για να δηλώσετε τη διαθεσιμότητα σας. Διαφορετικά είσατε αυτομάτως διαθέσιμος/η και μπορείτε να επιλεγείτε.` }),
+    //       });
         
-      } catch (err) {
-        console.error('Failed to send email:', err);
-      }
-    };
+    //   } catch (err) {
+    //     console.error('Failed to send email:', err);
+    //   }
+    // };
 
     const handleCreateMatch = async (e) => {
 
@@ -164,7 +164,7 @@ const CreateMatchForm = ({dateId}) => {
             availablereferees:refs
             })
             await db.updateDocument(ODKE_DB, COL_DATES, dateId, {match:[...matches, newMatch]})
-            emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date,newMatch.teams[0].name,newMatch.teams[1].name)})
+            //emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date,newMatch.teams[0].name,newMatch.teams[1].name)})
             //console.log('The Match is', newMatch);
             setTeamA('')
             setTeamB('')

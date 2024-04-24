@@ -28,17 +28,17 @@ const matchPage = ({params})=>{
     const getMatchData = async ()=>{
         try {
             const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
-            if(res.refA != ''){
+            if(res.refA != null ){
               setDisabledA(true)
             } else {
               setDisabledA(false)
             }
-            if(res.refB != ''){
+            if(res.refB != null){
               setDisabledB(true)
             } else {
               setDisabledB(false)
             }
-            if(res.komisario != ''){
+            if(res.komisario != null){
               setDisabledC(true)
             } else {
               setDisabledC(false)
@@ -55,6 +55,8 @@ const matchPage = ({params})=>{
             console.log('Error on Match Page', error.message);
         }   
     }
+
+    
 
     const updateMatchEmails = async ()=>{
             const emailsRes = await db.listDocuments(ODKE_DB, COL_REFS, [Query.equal('name', assignedRefs), Query.select('email')])
@@ -153,9 +155,9 @@ const matchPage = ({params})=>{
       try {
         const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
         if(res.refA === res.komisario){
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:null})
         }
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:null})
         const newList = assignedRefs.filter(r => r !== ref) 
         await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
       } catch (error) {
@@ -169,9 +171,9 @@ const matchPage = ({params})=>{
       try {
         const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
         if(res.refB === res.komisario){
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:null})
         }
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:null})
         const newList = assignedRefs.filter(r => r !== ref) 
         await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
       } catch (error) {
@@ -186,11 +188,11 @@ const matchPage = ({params})=>{
       try {
         const res = await db.getDocument(ODKE_DB,COL_MATCHES,params.match)
         if(res.komisario === res.refA){
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refA:null})
         } else if(res.komisario === res.refB){
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{refB:null})
         }
-        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:''})
+        await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{komisario:null})
         const newList = assignedRefs.filter(r => r !== ref) 
         await db.updateDocument(ODKE_DB,COL_MATCHES,params.match,{referees:newList})
       } catch (error) {
@@ -209,9 +211,9 @@ const matchPage = ({params})=>{
     let date = new Date(match.fulldate).toLocaleDateString('el-GR')
 
     //console.log('Match data: ', teams[0]);
-    //console.log('Refs in Match: ', refsInMatch);
-    //console.log('Assigned Refs: ', assignedRefs);
-    //console.log('Chosen Ref:', chosenRef);
+    // console.log('Refs in Match: ', refsInMatch);
+    // console.log('Assigned Refs: ', assignedRefs);
+    // console.log('Chosen Refs:', refIds);
     console.log('Chosen Ref Email is:', chosenRefEmail);
 
     const { user } = useAuth()
