@@ -47,7 +47,7 @@ export default function AuthProvider({children}) {
         try {
             const res = await account.get()
             setUser(res)
-            if(res.labels[0]==='admin'){
+            if(res.labels[0]==='adminsdeka'){
                 setIsUserAdmin(true)
             }
             
