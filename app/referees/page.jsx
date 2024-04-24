@@ -1,12 +1,23 @@
-import React from 'react'
+'use client'
+import React, {useEffect, useState }from 'react'
 import { ODKE_DB, COL_REFS, db } from '../utils/appwrite'
 import Link from 'next/link'
 
-async function pageReferees() {
+    function pageReferees() {
     
-    const res = await db.listDocuments(ODKE_DB, COL_REFS)
-    const refs = res.documents
-    console.log(refs.documents);
+        const[refs,setRefs]=useState([])
+        const getRefs = async ()=> {
+            try {
+            const res = await db.listDocuments(ODKE_DB, COL_REFS)
+            setRefs(res.documents)
+            } catch (error) {
+                console.log('Error from referees page: ', error.message);
+            }
+        }
+
+        useEffect(()=>{
+            getRefs()
+        },[])
 
   
     return (
