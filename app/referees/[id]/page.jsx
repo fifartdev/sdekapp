@@ -62,6 +62,10 @@ const refereePage = (params) => {
       <span className='m-2'><b>Ώρα:</b> { m.matchtime}</span>
       <span className='m-2'><b>Γήπεδο:</b> { m.arena}</span>
       <span className='m-2'><b>Ομάδες:</b> { m.teams[0].name} - { m.teams[1].name }</span>
+      <span className='m-2'><b>Διατητής Α:</b> { m.refA }</span>
+      <span className='m-2'><b>Διατητής Β:</b> { m.refB }</span>
+      <span className='m-2'><b>Κομισάριος:</b> { m.komisario }</span>
+
     </li>
   ))}
 </ul>

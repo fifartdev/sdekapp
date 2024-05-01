@@ -28,26 +28,26 @@ export default function CreateDateForm() {
       getAllRefsEmails()
     },[])
 
-    console.log(emails);
+    //console.log(emails);
 
-    // const handleSubmitEmail = async (e,em) => {
-    //   e.preventDefault();
+    const handleSubmitEmail = async (e) => {
+      e.preventDefault();
       
-    //   let finalDate = new Date(date).toLocaleDateString('el-GR')
+      //let finalDate = new Date(date).toLocaleDateString('el-GR')
       
-    //   try {
-    //       await fetch('/api/send', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ email:em, subject:`Στις ${finalDate} Ανακοινώθηκε νέα αγωνιστική`, message:'Νέα Ημερομηνία Αγώνα' }),
-    //       });
+      try {
+          await fetch('/api/send', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:'tassospan@outlook.com', subject:`Ανακοινώθηκε νέα αγωνιστική`, message:'Νέα Ημερομηνία Αγώνα' }),
+          });
         
-    //   } catch (err) {
-    //     console.error('Failed to send email:', err);
-    //   }
-    // };
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
   
 
   
@@ -58,7 +58,6 @@ export default function CreateDateForm() {
               date: date, 
               //referees:refs
             })
-            //emails.forEach(async (em)=>{ await handleSubmitEmail(e,em.email,date)})
             router.push('/dates')
             router.refresh('/dates')
         } catch (error) {
@@ -78,7 +77,7 @@ export default function CreateDateForm() {
       <label htmlFor="newDate" className="block text-gray-700 text-sm font-bold mb-2">Επιλέξετε Ημερομηνία</label>
       <input
         type="date"
-        min={nextFiveDays.toISOString().split("T")[0]}
+        // min={nextFiveDays.toISOString().split("T")[0]}
         id="newDate"
         value={date}
         onChange={(e) => setDate(e.target.value)}
