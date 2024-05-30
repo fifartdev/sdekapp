@@ -78,8 +78,11 @@ return(
       </div>
       <nav className="flex items-center justify-between flex-wrap bg-blue-800 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
-        <Link href="/">
-          <span className="font-semibold text-xl tracking-tight cursor-pointer">Αρχική</span>
+      <Link href="/">
+          <span className="font-semibold text-xl tracking-tight cursor-pointer m-3">Αρχική</span>
+        </Link>|
+        <Link href="https://oseka.gr/ekthesi-komisarioy-agonos/">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Έκθεση Κομισάριου</span>
         </Link>
       </div>
       <div className="block lg:hidden">

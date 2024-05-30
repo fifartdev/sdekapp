@@ -24,7 +24,7 @@ export default function pageDates() {
   const getData = async () => {
 
     try {
-      const res = await db.listDocuments(ODKE_DB,COL_DATES, [Query.orderAsc('date'), Query.limit(200)])
+      const res = await db.listDocuments(ODKE_DB,COL_DATES, [Query.orderDesc('date'), Query.limit(200)])
       setMatchDates(res.documents)
       
     } catch (error) {
@@ -72,7 +72,10 @@ export default function pageDates() {
   <nav className="flex items-center justify-between flex-wrap bg-blue-800 p-6">
       <div className="flex items-center flex-shrink-0 text-white mr-6">
         <Link href="/">
-          <span className="font-semibold text-xl tracking-tight cursor-pointer">Αρχική</span>
+          <span className="font-semibold text-xl tracking-tight cursor-pointer m-3">Αρχική</span>
+        </Link>|
+        <Link href="https://oseka.gr/ekthesi-komisarioy-agonos/">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Έκθεση Κομισάριου</span>
         </Link>
       </div>
       <div className="block lg:hidden">
@@ -137,12 +140,12 @@ export default function pageDates() {
       </div>
     </nav>
     <div>Ημερομηνίες Αγώνων</div>
-    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4">
       {matchDates.map(d => {
         let hDate = new Date(d.date).toLocaleDateString('el-GR');
         return (
           <li key={d.$id} className="bg-white rounded-lg shadow-md p-4" >
-            <button className="rounded-lg p-4" onClick={() => { router.push(`/dates/${d.$id}`) }}>{hDate}</button>
+            <button className="rounded-lg p-4 font-bold text-center" onClick={() => { router.push(`/dates/${d.$id}`) }}>{hDate}</button>
           </li>
         );
       })}
