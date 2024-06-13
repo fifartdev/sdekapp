@@ -76,6 +76,9 @@ export default function pageDates() {
         </Link>|
         <Link href="https://oseka.gr/ekthesi-komisarioy-agonos/">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Έκθεση Κομισάριου</span>
+        </Link> |
+        <Link href="/referees">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Διαιτητές</span>
         </Link>
       </div>
       <div className="block lg:hidden">

@@ -52,8 +52,18 @@ const refereePage = (params) => {
 
     return (
       <main className="flex justify-center min-h-screen">
-      <div className="w-full p-10">
-      <div className="text-xl font-bold mb-4 text-center"><Link style={{backgroundColor:'black',color:'white',padding:4, borderRadius:5}} href={'/referees'}>Πίσω</Link> - Σελίδα Διαιτητή: {ref?.name}</div>
+       <div className="w-full p-10">
+       <div className='flex justify-center bg-cyan-500 p-5'>
+        <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
+      </div>
+  <nav className="flex items-center justify-between flex-wrap bg-blue-800 p-6">
+      <div className="flex items-center flex-shrink-0 text-white mr-6">
+        <Link href="/">
+          <span className="font-semibold text-xl tracking-tight cursor-pointer m-3">Αρχική</span>
+        </Link>
+      </div>
+      </nav>
+      <div className="text-xl font-bold mb-4 text-center mt-3"><Link style={{backgroundColor:'black',color:'white',padding:4, borderRadius:5}} href={'/referees'}>Πίσω</Link> - Σελίδα Διαιτητή: {ref?.name}</div>
 
 <ul>
   {mdays?.map((m, index) => (
