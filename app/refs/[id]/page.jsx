@@ -1,70 +1,57 @@
 'use client'
-import { useState, useEffect } from "react"
-import { useAuth } from "../contexts/AuthContext"
-import { ODKE_DB, COL_REFS, db, ID, account, Query  } from "../utils/appwrite"
+import React, {useEffect, useState} from 'react';
 import { useRouter, redirect } from "next/navigation"
-import Link from "next/link"
+import Link from 'next/link';
+import { useAuth } from '@/app/contexts/AuthContext';
+import { COL_REFS, ODKE_DB, db } from '@/app/utils/appwrite';
 
-
-const refsPage = ()=> {
+function page(params) {
     const {user, isUserAdmin, handleLogout} = useAuth()
     const router = useRouter()
+    const [isOpen, setIsOpen] = useState(false);
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [refs, setRefs] = useState([])
-    const [isOpen, setIsOpen] = useState(false);
-    const [index, setIndex] = useState('')
     const [landline, setLandline] = useState('')
     const [mobile, setMobile] = useState('')
     const [category, setCategory] = useState('')
+    const [index, setIndex] = useState('')
 
-    const handleAddRef = async (e) => {
+    const getRef = async () => {
+        try {
+            const resp = await db.getDocument(ODKE_DB, COL_REFS, params.params.id)
+            setName(resp.name)
+            setMobile(resp.mobile)
+            setLandline(resp.landline)
+            setIndex(resp.index)
+            setCategory(resp.category)
+            setEmail(resp.email)
+            setPassword(resp.password)
+
+        } catch (error) {
+            console.log(error.message);
+            
+        }
+    }
+
+    useEffect(()=>{
+        getRef()
+    },[])
+
+
+    const handleUpdateRef = async (e) => {
         e.preventDefault()
         try {
-            const newaccount = await account.create(ID.unique(), email, password, name)
-            if(newaccount){
-                await db.createDocument(ODKE_DB, COL_REFS, ID.unique(), { name: name, user_id: newaccount.$id, email: email, index:index,landline:landline,mobile:mobile,category:category })
+            if(params.params.id){
+                await db.updateDocument(ODKE_DB, COL_REFS, params.params.id, { name: name, email: email,landline:landline,mobile:mobile,category:category, index:index, password:password })
             }
-            setEmail('')
-            setPassword('')
-            setName('')
-            setLandline('')
-            setMobile('')
-            setCategory('')
-
-            getAllRefs()
-            router.refresh()
+            router.push('/refs')
         } catch (error) {
             console.log('Error in Refs', error.message);
         }
     }
 
-    // const handleDeleteTeam = async (id) => {
-    //     try {
-    //         await db.deleteDocument(ODKE_DB, COL_TEAMS, id)
-    //         getAllTeams()
-    //         router.refresh()
-    //     } catch (error) {
-    //         console.log('Error deleting team', error.message);
-    //     }
-
-    // }
-
-    const getAllRefs = async ()=> {
-        try {
-            const res = await db.listDocuments(ODKE_DB, COL_REFS, [Query.limit(200)])
-            setRefs(res.documents)
-        } catch (error) {
-            console.log('Error list refs', error.message);
-        }
-    }
-
-    useEffect(()=>{
-        getAllRefs()
-    },[])
-
-   // console.log(refs);
+   
     if(!user){
         redirect('/')
       }
@@ -146,8 +133,8 @@ return(
         </div>
       </div>
     </nav>
-            <h1>Σελίδα Προσθήκης Διαιτητή </h1>
-        <form onSubmit={handleAddRef} className="w-full max-w-md">
+            <h1>Επεξεργασία Διαιτητή </h1>
+        <form onSubmit={handleUpdateRef} className="w-full max-w-md">
         <div className="mb-4">
     <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Όνομα</label>
         <input
@@ -164,15 +151,6 @@ return(
         id="email"
         value={email}
         onChange={(e)=>setEmail(e.target.value)}
-        required
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      />
-      <label htmlFor="pwd" className="block text-gray-700 text-sm font-bold mb-2">Κωδικός</label>
-        <input
-        type="password"
-        id="pwd"
-        value={password}
-        onChange={(e)=>setPassword(e.target.value)}
         required
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       />
@@ -227,24 +205,13 @@ return(
         </option>
       </select>
     </div>
-    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Προσθήκη</button>
+    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ενημέρωση</button>
     </form>
         <hr />
-        <div>
-  <h2 className="text-2xl font-bold mb-4">Όλοι οι Διαιτητές</h2>
-  <ul>
-    {refs?.map(r => (
-      <li key={r.$id} className="flex items-center justify-between mb-2">
-        <span>{r.name}</span> - <Link href={`/refs/${r.$id}`}>Επεξεργασία</Link>
-        {/* <button onClick={() => handleDeleteTeam(t.$id)} class="text-red-500">Διαγραφή</button> */}
-      </li>
-    ))}
-  </ul>
-</div>
-      </div>
+       </div>
       </main>
 )
 
 }
 
-export default refsPage
+export default page;
