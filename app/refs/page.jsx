@@ -235,7 +235,7 @@ return(
   <ul>
     {refs?.map(r => (
       <li key={r.$id} className="flex items-center justify-between mb-2">
-        <span>{r.name}</span> - <Link href={`/refs/${r.$id}`}>Επεξεργασία</Link>
+        <span>{r.name}</span>  <Link href={`/refs/${r.$id}`}>Επεξεργασία</Link>
         {/* <button onClick={() => handleDeleteTeam(t.$id)} class="text-red-500">Διαγραφή</button> */}
       </li>
     ))}
