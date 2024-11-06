@@ -18,13 +18,14 @@ const refsPage = ()=> {
     const [landline, setLandline] = useState('')
     const [mobile, setMobile] = useState('')
     const [category, setCategory] = useState('')
+    const [inactive,setInactive] = useState(null)
 
     const handleAddRef = async (e) => {
         e.preventDefault()
         try {
             const newaccount = await account.create(ID.unique(), email, password, name)
             if(newaccount){
-                await db.createDocument(ODKE_DB, COL_REFS, ID.unique(), { name: name, user_id: newaccount.$id, email: email, index:index,landline:landline,mobile:mobile,category:category })
+                await db.createDocument(ODKE_DB, COL_REFS, ID.unique(), { name: name, user_id: newaccount.$id, email: email, index:index,landline:landline,mobile:mobile,category:category, inactive:inactive })
             }
             setEmail('')
             setPassword('')

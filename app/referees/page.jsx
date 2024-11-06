@@ -23,21 +23,23 @@ import Link from 'next/link'
             
             const intRes = await db.listDocuments(ODKE_DB, COL_REFS, [
                 Query.limit(100),
-                Query.contains("category", "ΔΙΕΘΝΗΣ")
+                Query.contains("category", "ΔΙΕΘΝΗΣ"),
+                Query.equal('inactive',false)
             ] )
             const acatRes = await db.listDocuments(ODKE_DB, COL_REFS,[
                 Query.limit(100),
                 Query.contains("category", "Α ΚΑΤΗΓΟΡΙΑ"),
-                Query.isNull('inactive')
+                Query.equal('inactive',false)
             ] )
             const bcatRes = await db.listDocuments(ODKE_DB, COL_REFS,[
                 Query.limit(100),
                 Query.contains("category", "Β ΚΑΤΗΓΟΡΙΑ"),
-                Query.isNull('inactive')
+                Query.equal('inactive',false)
             ] )
             const trialRes = await db.listDocuments(ODKE_DB, COL_REFS, [
                 Query.limit(100),
-                Query.contains("category", "ΔΟΚΙΜΟΣ")
+                Query.contains("category", "ΔΟΚΙΜΟΣ"),
+                Query.equal('inactive',false)
             ] )
             const intInactRes = await db.listDocuments(ODKE_DB, COL_REFS, [
                 Query.limit(100),

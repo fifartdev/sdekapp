@@ -16,6 +16,7 @@ function page(params) {
     const [mobile, setMobile] = useState('')
     const [category, setCategory] = useState('')
     const [index, setIndex] = useState('')
+    const [inactive,setInactive] = useState('')
 
     const getRef = async () => {
         try {
@@ -27,6 +28,7 @@ function page(params) {
             setCategory(resp.category)
             setEmail(resp.email)
             setPassword(resp.password)
+            setInactive(resp.inactive);
 
         } catch (error) {
             console.log(error.message);
@@ -43,7 +45,7 @@ function page(params) {
         e.preventDefault()
         try {
             if(params.params.id){
-                await db.updateDocument(ODKE_DB, COL_REFS, params.params.id, { name: name, email: email,landline:landline,mobile:mobile,category:category, index:index, password:password })
+                await db.updateDocument(ODKE_DB, COL_REFS, params.params.id, { name: name, email: email,landline:landline,mobile:mobile,category:category, index:index, password:password, inactive:inactive })
             }
             router.push('/refs')
         } catch (error) {
@@ -204,6 +206,20 @@ return(
           ΔΟΚΙΜΟΣ
         </option>
       </select>
+      <label htmlFor="inactive" className="block text-gray-700 text-sm font-bold mb-2">ΚΑΤΑΣΤΑΣΗ</label>
+        <select
+            name="inactive"
+            id="inactive"
+            onChange={(e) => !inactive ? setInactive(true) : setInactive(false)}
+            value={inactive}
+            required
+            className="w-full bg-white border border-gray-300 rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        >
+  <option value="" disabled>Επιλέξτε κατάσταση</option>
+  <option value='false'>Ενεργός</option>
+  <option value='true'>Ανενεργός</option>
+</select>
+
     </div>
     <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Ενημέρωση</button>
     </form>
