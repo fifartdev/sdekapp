@@ -18,7 +18,7 @@ const refsPage = ()=> {
     const [landline, setLandline] = useState('')
     const [mobile, setMobile] = useState('')
     const [category, setCategory] = useState('')
-    const [inactive,setInactive] = useState(null)
+    const [inactive,setInactive] = useState(false)
 
     const handleAddRef = async (e) => {
         e.preventDefault()
