@@ -234,9 +234,12 @@ return(
         <div>
   <h2 className="text-2xl font-bold mb-4">Όλοι οι Διαιτητές</h2>
   <ul>
+    <li className="flex items-center justify-between mb-2">
+      <span className="font-bold">Α/Α - Index</span><span className="font-bold">Όνομα</span><span className="font-bold">Ενέργεια</span>
+    </li>
     {refs?.map(r => (
       <li key={r.$id} className="flex items-center justify-between mb-2">
-        <span>{r.name}</span>  <Link href={`/refs/${r.$id}`}>Επεξεργασία</Link>
+       <span>{r.index}</span><span>{r.name}</span><Link href={`/refs/${r.$id}`}>Επεξεργασία</Link>
         {/* <button onClick={() => handleDeleteTeam(t.$id)} class="text-red-500">Διαγραφή</button> */}
       </li>
     ))}
