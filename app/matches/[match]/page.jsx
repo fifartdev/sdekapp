@@ -44,6 +44,8 @@ const matchPage = ({params})=>{
               setDisabledC(false)
             }
             setMatch(res)
+            console.log('RESPONSE IS: ', res);
+            
             setRefIds(res.availablereferees)
             setAssignedRefs(res.referees)
             setTeams(res.teams)
@@ -218,7 +220,7 @@ const matchPage = ({params})=>{
     console.log('Match data: ', match);
     console.log('Refs in Match: ', refsInMatch);
     // console.log('Assigned Refs: ', assignedRefs);
-    // console.log('Chosen Refs:', refIds);
+    console.log('Chosen Refs:', refIds);
     console.log('Chosen Ref Email is:', chosenRefEmail);
 
     const { user } = useAuth()
@@ -227,6 +229,24 @@ const matchPage = ({params})=>{
         redirect('/')
       }
 
+    const handleDeleteMatch = async () => {
+      try {
+        await db.deleteDocument(ODKE_DB,COL_MATCHES,params.match)
+        router.push('/')
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const warnMessage = ()=>{
+  let text = "Προσοχή πρόκειται να διαγράψετε τον Αγώνα!\n OK ή Άκυρο.";
+  if (confirm(text) == true) {
+      handleDeleteMatch() 
+    } else {
+      window.alert('Ακυρώθηκε')    
+  }
+    }
+
     return (
         <main className="flex justify-center min-h-screen">
         <div className="w-full text-center p-10">
@@ -234,6 +254,8 @@ const matchPage = ({params})=>{
         <img src="https://oseka.gr/wp-content/uploads/2018/11/logo-oseka-white.png"/>
       </div>
         <button onClick={()=>router.back()} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >Πίσω στην Αγωνιστική</button>
+        <button onClick={()=>router.push(`/matches/edit/${params.match}`)} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >Επεξεργασία ώρας Αγώνα</button>
+        <button onClick={warnMessage} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >Διαγραφή Αγώνα</button>
         <div className="bg-white shadow-md rounded-md p-4 mb-4">
   <h1 className="text-lg font-bold mb-2">{date}</h1>
   <div className="overflow-x-auto flex justify-center">

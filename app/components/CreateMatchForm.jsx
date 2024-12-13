@@ -124,7 +124,7 @@ const CreateMatchForm = ({dateId}) => {
     //console.log('Current matches: ', matches);
     //console.log('DATE IS: ', date);
     // console.log('DATE ID IS: ', date);
-    //console.log('Refs are: ', refs);
+    console.log('Refs are: ', refs);
     
     
     const router = useRouter()
