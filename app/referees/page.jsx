@@ -76,7 +76,7 @@ import Link from 'next/link'
             getRefs()
         },[])
 
-        // console.log('Internationals are: ', inter);
+        console.log('Internationals are: ', inter);
         // console.log('A Category are: ', acat);
         // console.log('B Category are: ', bcat);
         // console.log('Trials are: ', trial);
