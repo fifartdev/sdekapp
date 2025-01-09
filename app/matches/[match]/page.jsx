@@ -77,7 +77,7 @@ const matchPage = ({params})=>{
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email: em.email, subject:`Έχετε οριστεί στις ${date}, ώρα ${time}`, message: `Οριστίκατε σε αγώνα ${ateam}-${bteam}, στο Γήπεδο ${arena}, ώρα ${time}.Οι ορισμοί έχουν ως εξής. Διαιτητής Α: ${refa}, Διαιτητής Β: ${refb}, Κομισάριος: ${kom}` }),
+            body: JSON.stringify({ email: em.email, subject:`Έχετε οριστεί στις ${date}, ώρα ${time}`, message: `Οριστίκατε σε αγώνα ${ateam}-${bteam}, στο Γήπεδο ${arena}, ημερομηνία ${date}, ώρα ${time}.Οι ορισμοί έχουν ως εξής. Διαιτητής Α: ${refa}, Διαιτητής Β: ${refb}, Κομισάριος: ${kom}` }),
           });
         })
         window.alert('Μήνυμα Εστάλη!')
