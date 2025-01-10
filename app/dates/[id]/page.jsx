@@ -38,7 +38,7 @@ const pageDate = ({params}) => {
       const mDate = new Date(res.date)
       const diffTime = Math.abs(mDate - today);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if(diffDays < 4){
+      if(diffDays < 1){
         setDisabled(true)
         // setAdminDisabled(false)
       }
