@@ -2,6 +2,7 @@
 import React, {useEffect, useState }from 'react'
 import { ODKE_DB, COL_REFS, db, Query } from '../utils/appwrite'
 import Link from 'next/link'
+import ParticipationCounter from '../components/ParticipationCounter'
 
     function pageReferees() {
         const [inter,setInter] = useState([])
@@ -74,12 +75,14 @@ import Link from 'next/link'
         }
         useEffect(()=>{
             getRefs()
+            
         },[])
 
         console.log('Internationals are: ', inter);
-        // console.log('A Category are: ', acat);
-        // console.log('B Category are: ', bcat);
-        // console.log('Trials are: ', trial);
+            console.log('A Category are: ', acat);
+            console.log('B Category are: ', bcat);
+            console.log('Trials are: ', trial);
+        
     
         if(isLoading){
             return (
@@ -127,7 +130,7 @@ import Link from 'next/link'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { inter?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
                 )
             }) }
         </ul>
@@ -135,7 +138,7 @@ import Link from 'next/link'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { acat?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
                 )
             }) }
         </ul>
@@ -143,7 +146,7 @@ import Link from 'next/link'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { bcat?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
                 )
             }) }
         </ul>
@@ -151,7 +154,7 @@ import Link from 'next/link'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { trial?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
                 )
             }) }
         </ul>

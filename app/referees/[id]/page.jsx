@@ -37,8 +37,8 @@ const refereePage = (params) => {
     useEffect(()=>{
       getRefMatches()
     },[])
-
-    // console.log('Refs Matches are: ', matches);
+    console.log('Ref is', ref);
+    console.log('Refs Matches are: ', matches);
 
    
     // mdays.map((m,index)=>{
