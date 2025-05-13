@@ -130,7 +130,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { inter?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id} year={'2024-25'} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2023-24'} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'}/></li>
                 )
             }) }
         </ul>
@@ -138,7 +138,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { acat?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id} year={'2024-25'} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2023-24'} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'}/></li>
                 )
             }) }
         </ul>
@@ -146,7 +146,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { bcat?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id} year={'2024-25'} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2023-24'} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'}/></li>
                 )
             }) }
         </ul>
@@ -154,7 +154,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { trial?.map((r, i=0)=>{
                 return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id}/></li>
+                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. {r.name}</Link> <ParticipationCounter id={r.$id} year={'2024-25'} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2023-24'} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'}/></li>
                 )
             }) }
         </ul>
