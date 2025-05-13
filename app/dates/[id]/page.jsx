@@ -18,7 +18,7 @@ const pageDate = ({params}) => {
   const [dMatches, setDMatches] = useState([])
   const [dateDif,setDateDif] = useState(null)
   const [isOpen, setIsOpen] = useState(false);
-
+  const [hide,setHide] = useState(false)
   
 
   
@@ -75,10 +75,87 @@ const pageDate = ({params}) => {
     }
   }
 
+  const removeRefFromAllMatches = () => {
+    try {
+      const res = dMatches.map(async (dm) => await removeRefFromMatch(dm.$id,user.$id))
+      return res
+    } catch (error) {
+      console.log('Error removing ref from all Matches: ', error.message);
+    } 
+  }
+
+  const checkIfRefisAvailable = () => {
+    try {
+       dMatches.map(async (dm) => {
+       const result = await dm
+       result.availablereferees.includes(user.$id) ? setHide(false) : setHide(true)
+      }
+       )
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  const handleSubmitEmail = async (e,email, user,teamA,teamB,date) => {
+      e.preventDefault();
+      try {
+          await fetch('/api/sendconfederation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:email, subject:`Αδυναμία Συμμετοχής ${user}`, message: `Αδυνατώ να συμμετέχω στον αγώνα ${teamA}-${teamB} στις ${date}.` }),
+          });
+        
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
+
+    const handleSubmitEmailToCertainMatch = async (e,email, user,teamA,teamB,date) => {
+      e.preventDefault();
+      try {
+          await fetch('/api/sendconfederation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:email, subject:`Δυνατότητα Συμμετοχής ${user}`, message: `Επιθυμώ να συμμετέχω στον αγώνα ${teamA}-${teamB} στις ${date}.` }),
+          });
+        
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
+
+    const handleSubmitEmailForAllDate = async (e,email,user,date) => {
+      e.preventDefault();
+      try {
+          await fetch('/api/sendconfederation', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email:email, subject:`Αδυναμία Συμμετοχής ${user}`, message: `Αδυνατώ να συμμετέχω συνολικά στις ${date}.` }),
+          });
+        
+      } catch (err) {
+        console.error('Failed to send email:', err);
+      }
+    };
+
+    
+
+
   
   useEffect(()=>{
     getDateData()
   },[])
+
+  useEffect(()=>{
+    checkIfRefisAvailable()
+  })
 
   
   
@@ -105,6 +182,9 @@ const pageDate = ({params}) => {
 
   //refsInDate.map(r=> console.log(r.name))
   
+  
+
+
   if(!user){
     redirect('/')
   }
@@ -186,6 +266,10 @@ const pageDate = ({params}) => {
       </div>
     </nav>
   <h1 className="text-2xl font-bold mb-4">Ημερομηνία: {theDate} - Γεία σου {user?.name}</h1>
+  { <button onClick={(e)=>{
+    removeRefFromAllMatches()
+    handleSubmitEmailForAllDate(e,user?.email,user?.name,theDate)
+    }} className={ hide ? "hidden" : "bg-red-600 p-4 text-white hover:bg-red-400"} >Αδυναμία συμμετοχής σε ολόκληρη την αγωνιστική ημέρα</button>}
   
   {isUserAdmin && <><hr className="my-4" /><CreateMatchForm dateId={params.id} /></>}
   <hr className="my-4" />
@@ -202,11 +286,17 @@ const pageDate = ({params}) => {
           { !isUserAdmin && d.availablereferees.includes(user.$id) ? <><div className="inline-block ml-2 rounded-full bg-green-500 p-1">
       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-      </svg></div> <button onClick={() => removeRefFromMatch(d.$id,user.$id)} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Αδυνατώ να συμμετέχω</button></>  : !isUserAdmin && <><div className="inline-block ml-2 rounded-full bg-red-500 p-1">
+      </svg></div> <button onClick={(e) => {
+        removeRefFromMatch(d.$id,user.$id)
+        handleSubmitEmail(e,user?.email, user?.name,d.teams[0].name,d.teams[1].name,theDate)
+        }} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Αδυνατώ να συμμετέχω</button></>  : !isUserAdmin && <><div className="inline-block ml-2 rounded-full bg-red-500 p-1">
       <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
       </svg>
-    </div> <button onClick={() => addRefOnMatch(d.$id,user.$id)} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Επιθυμώ να συμμετέχω</button></>} 
+    </div> <button onClick={(e) => {
+      addRefOnMatch(d.$id,user.$id)
+      handleSubmitEmailToCertainMatch(e,user?.email, user?.name,d.teams[0].name,d.teams[1].name,theDate)
+      }} className={disabled ? "hidden" : "text-blue-500 hover:underline"}>Επιθυμώ να συμμετέχω</button></>} 
           </div>
           { isUserAdmin && <button onClick={() => goToMatch(d.$id)} className={adminDisabled ? "hidden" : "text-blue-500 hover:underline"} >Περισσότερα</button> }
         </li>
