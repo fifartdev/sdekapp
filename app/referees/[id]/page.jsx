@@ -10,15 +10,14 @@ const refereePage = (params) => {
     const [matches, setMatches] = useState([])
     const [mdays, setMdays] = useState([])
     const [ref, setRef] = useState(null)
-
-    console.log(ref);
+    // console.log(ref);
 
     const getRefMatches = async ()=> {
       try {
         const resp = await db.getDocument(ODKE_DB, COL_REFS, params.params.id)
         setRef(resp)
         if(resp){
-          const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [resp.name]), Query.orderAsc('fulldate')])
+          const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [resp.name]), Query.orderDesc('fulldate')])
           const final = res.documents
           console.log('Data are', final);
           setMdays(final)
@@ -32,13 +31,14 @@ const refereePage = (params) => {
       }
     }
 
+
     
 
     useEffect(()=>{
       getRefMatches()
     },[])
-    console.log('Ref is', ref);
-    console.log('Refs Matches are: ', matches);
+    // console.log('Ref is', ref);
+    // console.log('Refs Matches are: ', matches);
 
    
     // mdays.map((m,index)=>{
@@ -72,9 +72,9 @@ const refereePage = (params) => {
       <span className='m-2'><b>Ώρα:</b> { m.matchtime}</span>
       <span className='m-2'><b>Γήπεδο:</b> { m.arena}</span>
       <span className='m-2'><b>Ομάδες:</b> { m.teams[0].name} - { m.teams[1].name }</span>
-      <span className='m-2'><b>Διατητής Α:</b> { m.refA }</span>
-      <span className='m-2'><b>Διατητής Β:</b> { m.refB }</span>
-      <span className='m-2'><b>Κομισάριος:</b> { m.komisario }</span>
+      <span  className={ref?.name === m.refA ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Διατητής Α:</b> {m.refA}</span>
+      <span  className={ref?.name === m.refB ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Διατητής Β:</b> { m.refB }</span>
+      <span className={ref?.name === m.komisario ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Κομισάριος:</b> { m.komisario }</span>
 
     </li>
   ))}
