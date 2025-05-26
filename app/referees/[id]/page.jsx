@@ -2,30 +2,20 @@
 
 import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
-import { ODKE_DB, db, COL_MATCHES, Query, COL_REFS } from '@/app/utils/appwrite'
+import { ODKE_DB, db, COL_REFS } from '@/app/utils/appwrite'
+import RefMatches from '@/app/components/RefMatches'
 
 const refereePage = (params) => {
-    console.log('params are: ',params.params.id);
+    //console.log('params are: ',params.params.id);
     
-    const [matches, setMatches] = useState([])
-    const [mdays, setMdays] = useState([])
     const [ref, setRef] = useState(null)
+    const [activeTab, setActiveTab] = useState("tab1");
     // console.log(ref);
 
     const getRefMatches = async ()=> {
       try {
         const resp = await db.getDocument(ODKE_DB, COL_REFS, params.params.id)
-        setRef(resp)
-        if(resp){
-          const res = await db.listDocuments(ODKE_DB, COL_MATCHES, [Query.contains('referees', [resp.name]), Query.orderDesc('fulldate')])
-          const final = res.documents
-          console.log('Data are', final);
-          setMdays(final)
-          const dts = final.map(d=>d.teams)
-          //console.log(dts);
-          setMatches(dts)      
-        }
-        
+        setRef(resp)        
       } catch (error) {
         console.log('Error from Refs Page',error.message);
       }
@@ -37,17 +27,7 @@ const refereePage = (params) => {
     useEffect(()=>{
       getRefMatches()
     },[])
-    // console.log('Ref is', ref);
-    // console.log('Refs Matches are: ', matches);
-
-   
-    // mdays.map((m,index)=>{
-    //   console.log('Date is: ', m.fulldate);
-    //   console.log('Time is: ', m.matchtime);
-    //   console.log('Arena is: ', m.arena);
-    //   console.log('Teams are');
-    //   m.teams.map(t=>console.log(t.name));
-    // })
+    
     
 
     return (
@@ -64,21 +44,66 @@ const refereePage = (params) => {
       </div>
       </nav>
       <div className="text-xl font-bold mb-4 text-center mt-3"><Link style={{backgroundColor:'black',color:'white',padding:4, borderRadius:5}} href={'/referees'}>Πίσω</Link> - Σελίδα Διαιτητή: {ref?.name}</div>
+      <div role="tablist" className="flex border-b border-gray-200">
+        <button
+          role="tab"
+          aria-selected={activeTab === "tab1"}
+          aria-controls="tab1-panel"
+          id="tab1"
+          onClick={() => setActiveTab("tab1")}
+          className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 ${
+            activeTab === "tab1"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-blue-500"
+          }`}
+        >
+          2024-25
+        </button>
+        <button
+          role="tab"
+          aria-selected={activeTab === "tab2"}
+          aria-controls="tab2-panel"
+          id="tab2"
+          onClick={() => setActiveTab("tab2")}
+          className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 ${
+            activeTab === "tab2"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-blue-500"
+          }`}
+        >
+          2023-24
+        </button>
+      </div>
 
-<ul>
-  {mdays?.map((m, index) => (
-    <li key={index} className="bg-white shadow-md rounded-md p-4 mb-4">
-      <span className='m-2'><b>Ημ/νία:</b> {new Date(m.fulldate).toLocaleDateString('el-Gr')}</span> 
-      <span className='m-2'><b>Ώρα:</b> { m.matchtime}</span>
-      <span className='m-2'><b>Γήπεδο:</b> { m.arena}</span>
-      <span className='m-2'><b>Ομάδες:</b> { m.teams[0].name} - { m.teams[1].name }</span>
-      <span  className={ref?.name === m.refA ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Διατητής Α:</b> {m.refA}</span>
-      <span  className={ref?.name === m.refB ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Διατητής Β:</b> { m.refB }</span>
-      <span className={ref?.name === m.komisario ? 'm-2 text-red-600 font-bold' : 'm-2'}><b>Κομισάριος:</b> { m.komisario }</span>
-
-    </li>
-  ))}
-</ul>
+      {/* Tab Panels */}
+      <div className="mt-4">
+        {activeTab === "tab1" && (
+          <div
+            id="tab1-panel"
+            role="tabpanel"
+            aria-labelledby="tab1"
+            className="p-4 bg-gray-50 rounded"
+          >
+            <h2 className="text-lg font-semibold">2024-25</h2>
+            <p className="mt-2 text-gray-700">
+                      <RefMatches id={params.params.id} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'} />
+            </p>
+          </div>
+        )}
+        {activeTab === "tab2" && (
+          <div
+            id="tab2-panel"
+            role="tabpanel"
+            aria-labelledby="tab2"
+            className="p-4 bg-gray-50 rounded"
+          >
+            <h2 className="text-lg font-semibold">2023-24</h2>
+            <p className="mt-2 text-gray-700">
+                      <RefMatches id={params.params.id} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'} />
+            </p>
+          </div>
+        )}
+      </div>
     </div>
     </main>
   )
