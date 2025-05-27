@@ -24,7 +24,7 @@ const listPage = () => {
         </Link>
       </div>
       </nav>
-      <div className="text-xl font-bold mb-4 text-center mt-3"><Link style={{backgroundColor:'black',color:'white',padding:4, borderRadius:5}} href={'/referees'}>Πίσω</Link></div>
+      <div className="text-xl font-bold mb-4 text-center mt-3"><Link style={{backgroundColor:'black',color:'white',padding:4, borderRadius:5}} href={'/'}>Πίσω</Link></div>
       <div role="tablist" className="flex border-b border-gray-200">
         <button
           role="tab"
