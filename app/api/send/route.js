@@ -19,7 +19,7 @@ export async function POST(request) {
       },
     });
     const info = await transporter.sendMail({
-      from: "ΚΕΔ ΟΣΕΚΑ<noreply@oseka.gr>", // sender address
+      from: "ΚΕΔ ΟΣΕΚΑ<oseka@fifart.net>", // sender address
       to: data.email, // list of receivers
       subject: data.subject, // Subject line
       text: data.message, // plain text body
