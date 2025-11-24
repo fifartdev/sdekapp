@@ -77,6 +77,19 @@ const refereePage = (params) => {
 
       {/* Tab Panels */}
       <div className="mt-4">
+       {activeTab === "tab1" && (
+          <div
+            id="tab1-panel"
+            role="tabpanel"
+            aria-labelledby="tab1"
+            className="p-4 bg-gray-50 rounded"
+          >
+            <h2 className="text-lg font-semibold">2025-26</h2>
+            <p className="mt-2 text-gray-700">
+                      <RefMatches id={params.params.id} start={'2025-11-01T00:00:00.000+00:00'} end={'2026-06-01T00:00:00.000+00:00'} />
+            </p>
+          </div>
+        )}
         {activeTab === "tab1" && (
           <div
             id="tab1-panel"
