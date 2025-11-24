@@ -57,7 +57,7 @@ const refereePage = (params) => {
               : "border-transparent text-gray-600 hover:text-blue-500"
           }`}
         >
-          2024-25
+          2025-26
         </button>
         <button
           role="tab"
@@ -67,6 +67,20 @@ const refereePage = (params) => {
           onClick={() => setActiveTab("tab2")}
           className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 ${
             activeTab === "tab2"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-blue-500"
+          }`}
+        >
+          2024-25
+        </button>
+        <button
+          role="tab"
+          aria-selected={activeTab === "tab3"}
+          aria-controls="tab3-panel"
+          id="tab3"
+          onClick={() => setActiveTab("tab3")}
+          className={`py-2 px-4 text-sm font-medium transition-colors border-b-2 ${
+            activeTab === "tab3"
               ? "border-blue-600 text-blue-600"
               : "border-transparent text-gray-600 hover:text-blue-500"
           }`}
@@ -90,11 +104,11 @@ const refereePage = (params) => {
             </p>
           </div>
         )}
-        {activeTab === "tab1" && (
+        {activeTab === "tab2" && (
           <div
-            id="tab1-panel"
+            id="tab2-panel"
             role="tabpanel"
-            aria-labelledby="tab1"
+            aria-labelledby="tab2"
             className="p-4 bg-gray-50 rounded"
           >
             <h2 className="text-lg font-semibold">2024-25</h2>
@@ -103,11 +117,11 @@ const refereePage = (params) => {
             </p>
           </div>
         )}
-        {activeTab === "tab2" && (
+        {activeTab === "tab3" && (
           <div
-            id="tab2-panel"
+            id="tab3-panel"
             role="tabpanel"
-            aria-labelledby="tab2"
+            aria-labelledby="tab3"
             className="p-4 bg-gray-50 rounded"
           >
             <h2 className="text-lg font-semibold">2023-24</h2>
