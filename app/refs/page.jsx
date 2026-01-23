@@ -223,8 +223,11 @@ return(
         <option value="Β ΚΑΤΗΓΟΡΙΑ">
           Β ΚΑΤΗΓΟΡΙΑ
         </option>
-        <option value="ΔΟΚΙΜΟΣ">
-          ΔΟΚΙΜΟΣ
+        <option value="Γ ΚΑΤΗΓΟΡΙΑ">
+          Γ ΚΑΤΗΓΟΡΙΑ
+        </option>
+        <option value="ΚΟΜΙΣΑΡΙΟΣ">
+          ΚΟΜΙΣΑΡΙΟΣ
         </option>
       </select>
     </div>
