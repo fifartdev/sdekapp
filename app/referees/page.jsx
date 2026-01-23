@@ -126,7 +126,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
         </Link>|
         <Link href="/referees">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Διαιτητές</span>
-        </Link>
+        </Link>| 
          <Link href="/komisarioi">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Κομισάριοι</span>
         </Link>
