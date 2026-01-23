@@ -42,7 +42,7 @@ function ParticipationCounter({ id, start, end, year }) {
         <>
             {loading
                 ? <div className="w-2 h-2 border-8 border-blue-500 border-solid border-t-transparent rounded-full animate-spin"></div>
-                : <><br/> <strong>Σύνολο Συμμετοχών για το {year} : </strong> {mdays.length}</>
+                : <><br/> <strong className='text-orange-500'>Σύνολο Συμμετοχών για το {year} : </strong> <span className='text-orange-500'>{mdays.length}</span></>
             }
         </>
     );

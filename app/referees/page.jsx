@@ -39,7 +39,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
             ] )
             const trialRes = await db.listDocuments(ODKE_DB, COL_REFS, [
                 Query.limit(100),
-                Query.contains("category", "ΔΟΚΙΜΟΣ"),
+                Query.contains("category", ["ΔΟΚΙΜΟΣ", "ΚΟΜΙΣΑΡΙΟΣ"]),
                 Query.equal('inactive',false)
             ] )
             const intInactRes = await db.listDocuments(ODKE_DB, COL_REFS, [
@@ -99,6 +99,9 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <Link href="/referees">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Διαιτητές</span>
         </Link>
+         <Link href="/komisarioi">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Κομισάριοι</span>
+        </Link>
       </div>
       </nav>
       <div className="w-12 h-12 border-8 border-blue-500 border-solid border-t-transparent rounded-full animate-spin mt-5 ml-5"></div>
@@ -124,8 +127,12 @@ import ParticipationCounter from '../components/ParticipationCounter'
         <Link href="/referees">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Διαιτητές</span>
         </Link>
+         <Link href="/komisarioi">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Κομισάριοι</span>
+        </Link>
       </div>
       </nav>
+        <h1 className='text-2xl text-center font-semibold my-3'>«ΙΣΤΟΡΙΚΟ ΟΡΙΣΜΩΝ ΔΙΑΙΤΗΤΩΝ»</h1>
           { inter.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">ΔΙΕΘΝΕΙΣ</h1> }
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { inter?.map((r, i=0)=>{
@@ -134,7 +141,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
                 )
             }) }
         </ul>
-        { inter.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">Α ΚΑΤΗΓΟΡΙΑ</h1> }
+        { acat.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">Α ΚΑΤΗΓΟΡΙΑ</h1> }
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { acat?.map((r, i=0)=>{
                 return (
@@ -142,7 +149,7 @@ import ParticipationCounter from '../components/ParticipationCounter'
                 )
             }) }
         </ul>
-       {inter.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">Β ΚΑΤΗΓΟΡΙΑ</h1> }
+       {bcat.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">Β ΚΑΤΗΓΟΡΙΑ</h1> }
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { bcat?.map((r, i=0)=>{
                 return (
@@ -150,15 +157,8 @@ import ParticipationCounter from '../components/ParticipationCounter'
                 )
             }) }
         </ul>
-       {inter.length > 0 && <h1 className="text-lg font-bold mb- mt-5">ΔΟΚΙΜΟΙ</h1> }
-        <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
-            { trial?.map((r, i=0)=>{
-                return (
-                    <li key={r.$id} className="bg-white rounded-lg shadow-md p-4"><Link href={`/referees/${r.$id}`}>{i+1}. <span className='text-red-600 font-bold'>{r.name}</span></Link><ParticipationCounter id={r.$id} year={'2025-26'} start={'2025-11-01T00:00:00.000+00:00'} end={'2026-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2024-25'} start={'2024-11-01T00:00:00.000+00:00'} end={'2025-06-01T00:00:00.000+00:00'}/> <ParticipationCounter id={r.$id} year={'2023-24'} start={'2023-11-01T00:00:00.000+00:00'} end={'2024-06-01T00:00:00.000+00:00'}/></li>
-                )
-            }) }
-        </ul>
-      {acatInact.length > 0 &&  <h1 className="text-2xl font-bold mb-2 mt-5">ΛΙΣΤΑ ΑΝΕΝΕΡΓΩΝ ΔΙΑΙΤΗΤΩΝ</h1> }
+
+      {acatInact.length > 0 &&  <h1 className="text-2xl font-bold mb-2 mt-5">ΑΡΧΕΙΟ ΠΡΩΗΝ ΔΙΑΙΤΗΤΩΝ</h1> }
        { interInact.length > 0 && <h1 className="text-lg font-bold mb-2 mt-5">ΔΙΕΘΝΕΙΣ</h1> }
         <ul className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4 mt-4" >
             { interInact?.map((r, i=0)=>{

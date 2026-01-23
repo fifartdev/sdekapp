@@ -202,8 +202,11 @@ return(
         <option value="Β ΚΑΤΗΓΟΡΙΑ">
           Β ΚΑΤΗΓΟΡΙΑ
         </option>
-        <option value="ΔΟΚΙΜΟΣ">
-          ΔΟΚΙΜΟΣ
+        <option value="Γ ΚΑΤΗΓΟΡΙΑ">
+          Γ ΚΑΤΗΓΟΡΙΑ
+        </option>
+        <option value="ΚΟΜΙΣΑΡΙΟΣ">
+          ΚΟΜΙΣΑΡΙΟΣ
         </option>
       </select>
       <label htmlFor="inactive" className="block text-gray-700 text-sm font-bold mb-2">ΚΑΤΑΣΤΑΣΗ</label>

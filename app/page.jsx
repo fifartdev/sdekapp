@@ -34,6 +34,9 @@ export default function Home() {
         <Link href="/referees">
           <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Διαιτητές</span>
         </Link>
+         <Link href="/komisarioi">
+          <span className="font-semibold text-md tracking-tight cursor-pointer m-3">Κομισάριοι</span>
+        </Link>
       </div>
       </nav>
         <h1 className="text-2xl font-bold mb-4">Εφαρμογή Ορισμών Διαιτητών - ΚΕΔ ΟΣΕΚΑ</h1>
