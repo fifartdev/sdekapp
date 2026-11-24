@@ -15,6 +15,8 @@ import {
   Menu,
   X,
   Plus,
+  FileText,
+  ExternalLink,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -56,6 +58,17 @@ function NavLinks({ user, pathname, onNavigate }: { user: CurrentUser; pathname:
           </Link>
         );
       })}
+      <a
+        href="https://oseka.gr/ekthesi-komisarioy-agonos/"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={onNavigate}
+        className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+      >
+        <FileText className="h-4 w-4 shrink-0" />
+        Έκθεση Κομισαρίου
+        <ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0 opacity-60" />
+      </a>
       {user.role === "admin" ? (
         <Link
           href="/match-days/new"
@@ -122,9 +135,20 @@ export function DashboardShell({ user, children }: { user: CurrentUser; children
       <div className="flex flex-1 flex-col lg:hidden">
         <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4">
           <SidebarHeader />
-          <button onClick={() => setOpen(true)} aria-label="Μενού">
-            <Menu className="h-6 w-6" />
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href="https://oseka.gr/ekthesi-komisarioy-agonos/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 whitespace-nowrap rounded-md border border-border px-2 py-1.5 text-xs font-medium text-foreground hover:bg-secondary"
+            >
+              <FileText className="h-3.5 w-3.5 shrink-0" />
+              Έκθεση Κομισαρίου
+            </a>
+            <button onClick={() => setOpen(true)} aria-label="Μενού">
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
         </header>
         <AnimatePresence>
           {open ? (

@@ -34,6 +34,14 @@ export async function PublicHeader() {
           >
             Κομισάριοι
           </Link>
+          <a
+            href="https://oseka.gr/ekthesi-komisarioy-agonos/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md px-3 py-2 text-sm font-medium text-primary-foreground/80 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+          >
+            Έκθεση Κομισαρίου
+          </a>
           <Button asChild variant="secondary" size="sm" className="ml-2">
             <Link href={user ? "/dashboard" : "/"}>
               {user ? <LayoutDashboard className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
