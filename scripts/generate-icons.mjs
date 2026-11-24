@@ -3,7 +3,7 @@
 // The source logo is a wide banner; only its left emblem square (Ο.Σ.Ε.Κ.Α. / H.W.B.F.) is legible
 // at icon sizes, so we crop that and centre it on the emblem's own background colour.
 import sharp from "sharp";
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 
 const SRC = "public/logo-oseka.png";
 const OUT = "public/icons";
@@ -46,4 +46,42 @@ await square(512, 0.86, "icon-512.png");
 await square(512, 0.62, "maskable-512.png");
 await square(180, 0.86, "apple-touch-icon.png");
 await badge(96, "badge-96.png");
+// Favicon via the Next.js file convention (app/icon.png → <link rel="icon">).
+await square(64, 0.86, "../../app/icon.png");
+
+// app/favicon.ico: ICO container holding PNG images (supported by all current browsers).
+async function favicon(sizes, file) {
+  const pngs = [];
+  for (const size of sizes) {
+    const art = await emblem().resize({ height: Math.round(size * 0.86) }).toBuffer();
+    pngs.push(
+      await sharp({ create: { width: size, height: size, channels: 4, background: BG } })
+        .composite([{ input: art, gravity: "center" }])
+        .flatten({ background: BG })
+        .png()
+        .toBuffer()
+    );
+  }
+  const header = Buffer.alloc(6);
+  header.writeUInt16LE(0, 0); // reserved
+  header.writeUInt16LE(1, 2); // type: icon
+  header.writeUInt16LE(pngs.length, 4);
+  let offset = 6 + 16 * pngs.length;
+  const entries = pngs.map((png, i) => {
+    const e = Buffer.alloc(16);
+    const size = sizes[i];
+    e.writeUInt8(size >= 256 ? 0 : size, 0);
+    e.writeUInt8(size >= 256 ? 0 : size, 1);
+    e.writeUInt8(0, 2); // palette
+    e.writeUInt8(0, 3); // reserved
+    e.writeUInt16LE(1, 4); // colour planes
+    e.writeUInt16LE(32, 6); // bits per pixel
+    e.writeUInt32LE(png.length, 8);
+    e.writeUInt32LE(offset, 12);
+    offset += png.length;
+    return e;
+  });
+  await writeFile(file, Buffer.concat([header, ...entries, ...pngs]));
+}
+await favicon([16, 32, 48], "app/favicon.ico");
 console.log("icons written to", OUT);
