@@ -10,10 +10,13 @@ import {
   matchAvailableReferees,
   matchAssignments,
   referees,
+  profiles,
   assignmentRoleEnum,
 } from "@/lib/db/schema";
 import { requireAdminAction, requireUserAction } from "@/lib/auth/session";
 import { sendMail, sendMailToMany } from "@/lib/email";
+import { sendPushToProfiles } from "@/lib/push";
+import { assignmentPush, availabilityPush, assignedProfileIds } from "@/lib/push-messages";
 
 const CONFEDERATION_RECIPIENTS = "ked.oseka@gmail.com, oseka@oseka.gr";
 
@@ -81,8 +84,23 @@ export async function deleteMatch(matchId: string, matchDayId: string) {
 // --- Referee self-service availability ---
 
 /** Best-effort - don't fail the availability toggle itself if the notification email can't be sent. */
-async function notifyFederation(subject: string, message: string) {
-  await sendMail({ to: CONFEDERATION_RECIPIENTS, subject, text: message }).catch(() => {});
+async function notifyAdminsPush(matchDayId: string, subject: string, message: string) {
+  try {
+    const admins = await getDb().select({ id: profiles.id }).from(profiles).where(eq(profiles.role, "admin"));
+    await sendPushToProfiles(
+      admins.map((a) => a.id),
+      availabilityPush({ matchDayId, subject, message })
+    );
+  } catch (err) {
+    console.error("[push] notifyAdminsPush failed", err);
+  }
+}
+
+async function notifyFederation(matchDayId: string, subject: string, message: string) {
+  await Promise.all([
+    sendMail({ to: CONFEDERATION_RECIPIENTS, subject, text: message }).catch(() => {}),
+    notifyAdminsPush(matchDayId, subject, message),
+  ]);
 }
 
 export async function setMyAvailability(matchId: string, matchDayId: string, available: boolean) {
@@ -112,11 +130,13 @@ export async function setMyAvailability(matchId: string, matchDayId: string, ava
     const teams = `${match.homeTeam.name}-${match.awayTeam.name}`;
     if (available) {
       await notifyFederation(
+        matchDayId,
         `Δυνατότητα Συμμετοχής ${user.referee.name}`,
         `Επιθυμώ να συμμετέχω στον αγώνα ${teams} στις ${date}.`
       );
     } else {
       await notifyFederation(
+        matchDayId,
         `Αδυναμία Συμμετοχής ${user.referee.name}`,
         `Αδυνατώ να συμμετέχω στον αγώνα ${teams} στις ${date}.`
       );
@@ -143,6 +163,7 @@ export async function setUnavailableForWholeDay(matchDayId: string) {
   if (day) {
     const date = new Date(day.date).toLocaleDateString("el-GR");
     await notifyFederation(
+      matchDayId,
       `Αδυναμία Συμμετοχής ${user.referee.name}`,
       `Αδυνατώ να συμμετέχω συνολικά στις ${date}.`
     );
@@ -202,10 +223,23 @@ export async function sendAssignmentNotification(matchId: string) {
   const commissioner = match.assignments.find((a) => a.role === "commissioner")?.referee.name ?? "-";
 
   const recipients = match.assignments.map((a) => a.referee.email);
+  const pushPromise = sendPushToProfiles(
+    assignedProfileIds(match.assignments),
+    assignmentPush({
+      matchId: match.id,
+      home: match.homeTeam.name,
+      away: match.awayTeam.name,
+      arena: match.arena.name,
+      date,
+      time: match.matchTime,
+    })
+  );
   const { failed } = await sendMailToMany(recipients, () => ({
     subject: `Έχετε οριστεί στις ${date}, ώρα ${match.matchTime}`,
     text: `Οριστίκατε σε αγώνα ${match.homeTeam.name}-${match.awayTeam.name}, στο Γήπεδο ${match.arena.name}, ημερομηνία ${date}, ώρα ${match.matchTime}. Οι ορισμοί έχουν ως εξής. Διαιτητής Α: ${refA}, Διαιτητής Β: ${refB}, ${refC ? `Διαιτητής Γ: ${refC}, ` : ""}Κομισάριος: ${commissioner}`,
   }));
+
+  await pushPromise; // never rejects
 
   if (failed.length > 0) {
     throw new Error(`Απέτυχε η αποστολή σε: ${failed.join(", ")}`);
