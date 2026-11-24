@@ -22,6 +22,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SignOutButton } from "@/components/sign-out-button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { NotificationsToggle } from "@/components/notifications-toggle";
+import { PwaPrompt } from "@/components/pwa-prompt";
 import type { CurrentUser } from "@/lib/auth/session";
 
 const NAV_ITEMS = [
@@ -109,6 +111,7 @@ function SidebarFooter({ user }: { user: CurrentUser }) {
         <div className="text-xs text-muted-foreground">{user.role === "admin" ? "Διαχειριστής" : "Διαιτητής"}</div>
       </div>
       <div className="flex shrink-0 items-center gap-1">
+        <NotificationsToggle />
         <ThemeToggle variant="ghost" />
         <SignOutButton variant="ghost" iconOnly />
       </div>
@@ -194,6 +197,7 @@ export function DashboardShell({ user, children }: { user: CurrentUser; children
           {children}
         </motion.div>
       </main>
+      <PwaPrompt loggedIn />
     </div>
   );
 }

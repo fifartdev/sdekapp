@@ -3,6 +3,7 @@ import Image from "next/image";
 import { LayoutDashboard, LogIn } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth/session";
 import { Button } from "@/components/ui/button";
+import { PwaPrompt } from "@/components/pwa-prompt";
 
 export async function PublicHeader() {
   const user = await getCurrentUser();
@@ -50,6 +51,7 @@ export async function PublicHeader() {
           </Button>
         </nav>
       </div>
+      <PwaPrompt loggedIn={Boolean(user)} />
     </header>
   );
 }
