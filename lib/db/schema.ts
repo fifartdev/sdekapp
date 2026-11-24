@@ -195,3 +195,16 @@ export const matchAssignmentsRelations = relations(matchAssignments, ({ one }) =
     references: [referees.id],
   }),
 }));
+
+/** Web-push subscriptions: one row per browser/device a user enabled notifications on. */
+export const pushSubscriptions = pgTable("push_subscriptions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  profileId: uuid("profile_id")
+    .notNull()
+    .references(() => profiles.id, { onDelete: "cascade" }),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

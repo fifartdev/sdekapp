@@ -10,7 +10,8 @@
     "db:push": "dotenv -e .env.local -- drizzle-kit push",
     "db:studio": "dotenv -e .env.local -- drizzle-kit studio",
     "db:seed": "dotenv -e .env.local -- tsx scripts/seed.ts",
-    "migrate:appwrite": "dotenv -e .env.local -- tsx scripts/migrate-from-appwrite.ts"
+    "migrate:appwrite": "dotenv -e .env.local -- tsx scripts/migrate-from-appwrite.ts",
+    "test": "tsx --test lib/*.test.ts"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.4",
@@ -33,6 +34,7 @@
     "react-dom": "^19.2.8",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
+    "web-push": "^3.6.7",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -40,6 +42,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "@types/web-push": "^3.6.4",
     "autoprefixer": "^10.4.20",
     "dotenv-cli": "^8.0.0",
     "drizzle-kit": "^0.31.10",
