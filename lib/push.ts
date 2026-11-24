@@ -8,6 +8,25 @@ export function isGoneStatus(statusCode: number | undefined): boolean {
   return statusCode === 404 || statusCode === 410;
 }
 
+const PUSH_HOST_SUFFIXES = [
+  "fcm.googleapis.com", // Chrome / Android / Edge (Chromium)
+  ".push.apple.com", // Safari / iOS
+  "updates.push.services.mozilla.com", // Firefox
+  ".notify.windows.com", // legacy Edge / Windows
+];
+
+/** Only real browser push services: we POST to this URL server-side, so never accept arbitrary hosts. */
+export function isAllowedPushEndpoint(endpoint: string): boolean {
+  let url: URL;
+  try {
+    url = new URL(endpoint);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== "https:") return false;
+  return PUSH_HOST_SUFFIXES.some((s) => (s.startsWith(".") ? url.hostname.endsWith(s) : url.hostname === s));
+}
+
 let configured: boolean | null = null;
 
 function configure(): boolean {
@@ -40,6 +59,7 @@ export async function sendPushToProfiles(profileIds: string[], payload: PushPayl
       subs.map((s) =>
         webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, body, {
           TTL: 60 * 60 * 24,
+          timeout: 8000, // web-push has no default socket timeout; never let a push stall an action
         })
       )
     );

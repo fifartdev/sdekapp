@@ -50,3 +50,15 @@ test("logged out and installed: nothing", () => {
 test("already subscribed: nothing", () => {
   assert.equal(decidePrompt({ ...base, isStandalone: true, subscribed: true, permission: "granted" }), "none");
 });
+
+import { needsResync } from "./pwa-state";
+
+test("needsResync: logged-in user with a granted, existing device subscription re-claims it", () => {
+  assert.equal(needsResync({ loggedIn: true, permission: "granted", hasSubscription: true }), true);
+});
+
+test("needsResync: nothing to do when logged out, not granted, or no subscription", () => {
+  assert.equal(needsResync({ loggedIn: false, permission: "granted", hasSubscription: true }), false);
+  assert.equal(needsResync({ loggedIn: true, permission: "default", hasSubscription: true }), false);
+  assert.equal(needsResync({ loggedIn: true, permission: "granted", hasSubscription: false }), false);
+});

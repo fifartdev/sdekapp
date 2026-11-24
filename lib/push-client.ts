@@ -50,6 +50,13 @@ export async function enablePush(): Promise<"granted" | "denied" | "unsupported"
   return "granted";
 }
 
+/** Re-registers this device's existing subscription for the signed-in user (no prompt). */
+export async function syncPush(): Promise<void> {
+  const sub = await getSubscription();
+  if (!sub || Notification.permission !== "granted") return;
+  await subscribePush(sub.toJSON(), navigator.userAgent);
+}
+
 export async function disablePush(): Promise<void> {
   const sub = await getSubscription();
   if (!sub) return;

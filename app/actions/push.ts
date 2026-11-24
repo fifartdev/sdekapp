@@ -5,9 +5,10 @@ import { z } from "zod";
 import { getDb } from "@/lib/db/client";
 import { pushSubscriptions } from "@/lib/db/schema";
 import { requireUserAction } from "@/lib/auth/session";
+import { isAllowedPushEndpoint } from "@/lib/push";
 
 const subscriptionSchema = z.object({
-  endpoint: z.string().url(),
+  endpoint: z.string().max(1000).refine(isAllowedPushEndpoint, "Μη έγκυρη συνδρομή ειδοποιήσεων"),
   keys: z.object({ p256dh: z.string().min(1), auth: z.string().min(1) }),
 });
 
@@ -20,7 +21,7 @@ export async function subscribePush(sub: unknown, userAgent?: string): Promise<v
     endpoint,
     p256dh: keys.p256dh,
     auth: keys.auth,
-    userAgent: userAgent?.slice(0, 500) ?? null,
+    userAgent: typeof userAgent === "string" ? userAgent.slice(0, 500) : null,
   };
   await getDb()
     .insert(pushSubscriptions)
@@ -31,6 +32,7 @@ export async function subscribePush(sub: unknown, userAgent?: string): Promise<v
 /** Removes this device's subscription, only if it belongs to the current user. */
 export async function unsubscribePush(endpoint: string): Promise<void> {
   const user = await requireUserAction();
+  if (typeof endpoint !== "string") return;
   await getDb()
     .delete(pushSubscriptions)
     .where(and(eq(pushSubscriptions.endpoint, endpoint), eq(pushSubscriptions.profileId, user.id)));

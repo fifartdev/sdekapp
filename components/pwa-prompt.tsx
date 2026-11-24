@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Bell, Download, Share, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { decidePrompt, type PromptView } from "@/lib/pwa-state";
-import { enablePush, getSubscription, pushSupported, registerSw } from "@/lib/push-client";
+import { decidePrompt, needsResync, type PromptView } from "@/lib/pwa-state";
+import { enablePush, getSubscription, pushSupported, registerSw, syncPush } from "@/lib/push-client";
 
 const DISMISS_KEY = "pwa-prompt-dismissed-until";
 const DISMISS_MS = 14 * 24 * 60 * 60 * 1000;
@@ -40,17 +40,18 @@ function detect() {
 
 export function PwaPrompt({ loggedIn }: { loggedIn: boolean }) {
   const [view, setView] = useState<PromptView>("none");
-  const [installEvent, setInstallEvent] = useState<InstallPromptEvent | null>(null);
+  // A ref, not state: recompute() calls can overlap, and each must see the latest install event.
+  const installEvent = useRef<InstallPromptEvent | null>(null);
   const [busy, setBusy] = useState(false);
 
   const recompute = useCallback(
-    async (evt: InstallPromptEvent | null) => {
+    async () => {
       const supported = pushSupported();
       const subscribed = supported ? Boolean(await getSubscription().catch(() => null)) : false;
       setView(
         decidePrompt({
           ...detect(),
-          hasInstallPrompt: evt !== null,
+          hasInstallPrompt: installEvent.current !== null,
           pushSupported: supported,
           permission: supported ? (Notification.permission as "default" | "granted" | "denied") : "default",
           subscribed,
@@ -63,17 +64,24 @@ export function PwaPrompt({ loggedIn }: { loggedIn: boolean }) {
   );
 
   useEffect(() => {
-    void registerSw().then(() => recompute(null));
+    void registerSw().then(async () => {
+      if (pushSupported()) {
+        const sub = await getSubscription().catch(() => null);
+        if (needsResync({ loggedIn, permission: Notification.permission, hasSubscription: sub !== null })) {
+          await syncPush().catch((err) => console.error("[pwa] resync failed", err));
+        }
+      }
+      await recompute();
+    });
 
     const onPrompt = (e: Event) => {
       e.preventDefault();
-      const evt = e as InstallPromptEvent;
-      setInstallEvent(evt);
-      void recompute(evt);
+      installEvent.current = e as InstallPromptEvent;
+      void recompute();
     };
     const onInstalled = () => {
-      setInstallEvent(null);
-      void recompute(null);
+      installEvent.current = null;
+      void recompute();
     };
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
@@ -81,7 +89,7 @@ export function PwaPrompt({ loggedIn }: { loggedIn: boolean }) {
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
     };
-  }, [recompute]);
+  }, [recompute, loggedIn]);
 
   if (view === "none") return null;
 
@@ -91,11 +99,12 @@ export function PwaPrompt({ loggedIn }: { loggedIn: boolean }) {
   };
 
   const install = async () => {
-    if (!installEvent) return;
-    await installEvent.prompt();
-    await installEvent.userChoice.catch(() => null);
-    setInstallEvent(null);
-    void recompute(null);
+    const evt = installEvent.current;
+    if (!evt) return;
+    await evt.prompt();
+    await evt.userChoice.catch(() => null);
+    installEvent.current = null;
+    void recompute();
   };
 
   const enable = async () => {

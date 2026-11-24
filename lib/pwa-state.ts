@@ -12,6 +12,14 @@ export type PwaEnv = {
 
 export type PromptView = "none" | "install-android" | "install-ios" | "enable-notifications";
 
+/**
+ * A device subscription outlives the login: re-claim it for whoever is signed in now
+ * (another user may have enabled it on this device, or the server row may be gone).
+ */
+export function needsResync(s: { loggedIn: boolean; permission: string; hasSubscription: boolean }): boolean {
+  return s.loggedIn && s.permission === "granted" && s.hasSubscription;
+}
+
 /** Which banner (if any) a phone visitor should see. */
 export function decidePrompt(env: PwaEnv): PromptView {
   if (env.dismissed || !env.isMobile) return "none";

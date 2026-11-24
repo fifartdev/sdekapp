@@ -11,7 +11,8 @@ export function assignmentPush(a: {
   return {
     title: `Έχετε οριστεί στις ${a.date}, ώρα ${a.time}`,
     body: `${a.home}-${a.away}, ${a.arena}`,
-    url: `/matches/${a.matchId}`,
+    // /matches/[id] is admin-only; referees see their assignments here.
+    url: "/my-assignments",
   };
 }
 
